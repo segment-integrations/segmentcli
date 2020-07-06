@@ -7,7 +7,7 @@ import chalk from 'chalk';
 export function initialize(api: EdgeFunctionService): CommandModule {
   return {
     command: 'edgefn',
-    describe: `Contains all the ${chalk.green('edge function')} commands`,
+    describe: `contains all the ${chalk.green('edge function')} commands`,
     builder: yargs => (
       yargs
         .command(InitCommand.initialize())

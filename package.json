@@ -1,7 +1,7 @@
 {
   "name": "segmentcli",
   "version": "1.0.0",
-  "description": "",
+  "description": "Helps build amazing tools to work with the Segment infrastructure",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
