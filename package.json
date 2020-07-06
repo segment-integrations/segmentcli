@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/chalk": "^2.2.0",
+    "chalk": "^4.1.0",
     "yargs": "^15.4.0"
   },
   "devDependencies": {
