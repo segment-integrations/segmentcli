@@ -8,4 +8,5 @@ yargs
   .scriptName('segmentcli')
   .wrap(yargs.terminalWidth())
   .command(EdgefnCommand.initialize(edgefnAPI))
+  .demandCommand(1, 'Command required')
   .parse();
