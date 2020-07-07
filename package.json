@@ -9,7 +9,12 @@
   },
   "keywords": [],
   "author": "",
+  "private": true,
   "license": "ISC",
+  "bin": {
+    "segmentcli": "./dist/index.js",
+    "prepublish": "tsc"
+  },
   "dependencies": {
     "chalk": "^4.1.0",
     "yargs": "^15.4.0"

@@ -102,15 +102,17 @@ ${chalk.red(JSON.stringify(result, null, 2))}
 
           return;
         }
+      } else {
+        console.log('Only checking file structure...');
+      }
 
-        console.log(`
+      console.log(`
 ${chalk.green('Passed! 🎉')}
 
 Use the below command to upload this bundle to the web:
 
 ${chalk.magenta('segmentcli edgefn upload <jsBundle>')}
-`);
-      }
+      `);
     },
   };
 }
