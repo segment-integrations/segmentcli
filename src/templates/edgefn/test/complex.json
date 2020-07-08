@@ -1,0 +1,47 @@
+
+{
+  "anonymousId": "D4EFB296-2862-45F3-AB9A-9FB0081A9AE7",
+  "context": {
+    "app": {
+      "build": "5",
+      "name": "Swift Radio",
+      "namespace": "com.segment.SwiftRadio",
+      "version": "2.0.6"
+    },
+    "device": {
+      "id": "511A9EEB-5EFE-46E7-BD5A-B4538DFF421B",
+      "manufacturer": "Apple",
+      "model": "x86_64",
+      "name": "iPhone",
+      "type": "ios"
+    },
+    "ip": "10.10.0.10",
+    "library": {
+      "name": "analytics-ios",
+      "version": "4.0.0"
+    },
+    "locale": "en-US",
+    "myValue": "chocolate",
+    "network": {
+      "cellular": false,
+      "wifi": true
+    },
+    "os": {
+      "name": "iOS",
+      "version": "13.5"
+    },
+    "screen": {
+      "height": 667,
+      "width": 375
+    },
+    "timezone": "America/Los_Angeles",
+    "traits": {}
+  },
+  "event": "test0",
+  "integrations": {},
+  "properties": {},
+  "messageId": "C1842A61-4062-4898-8888-A5B87A392B12",
+  "originalTimestamp": "2020-06-11T18:17:34.663534998Z",
+  "type": "track",
+  "userId": "brandon"
+}

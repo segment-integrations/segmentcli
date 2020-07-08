@@ -5,25 +5,28 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "clean": "rm -rf dist",
+    "build": "tsc && cp -r src/templates dist",
+    "dev": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
   "private": true,
   "license": "ISC",
   "bin": {
-    "segmentcli": "./dist/index.js",
-    "prepublish": "tsc"
+    "segmentcli": "./dist/index.js"
   },
   "dependencies": {
     "chalk": "^4.1.0",
+    "fs-extra": "^9.0.1",
     "yargs": "^15.4.0"
   },
   "devDependencies": {
-    "@types/node": "^14.0.19",
+    "@types/fs-extra": "^9.0.1",
+    "@types/node": "^14.0.20",
     "@types/yargs": "^15.0.5",
     "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
+    "tslint": "^5.20.1",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.5.3"
   }

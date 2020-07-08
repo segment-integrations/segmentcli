@@ -24,6 +24,11 @@
       "allowSyntheticDefaultImports": true,
       "resolveJsonModule": true,
       "esModuleInterop": true
-    }
+    },
+    "exclude": [
+      "node_modules",
+      "src/templates",
+      "dist"
+    ]
   }
   
