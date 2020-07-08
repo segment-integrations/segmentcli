@@ -75,7 +75,7 @@ export function initialize(): CommandModule {
       }
 
       if (argv.input || argv.output) {
-        let result = input;
+        let result = Object.assign({}, input);
 
         if (argv.verbose) {
           console.log(`Input: ${JSON.stringify(result, null, 2)}`);
