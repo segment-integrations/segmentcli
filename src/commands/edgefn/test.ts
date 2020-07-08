@@ -32,13 +32,13 @@ export function initialize(): CommandModule {
       let testFile: TestJSON = {};
 
       if (!fs.existsSync(argv.jsBundle)) {
-        console.log(`File containing an ${chalk.red('edge function bundle')} does not exist!`);
+        console.log(`Oh no ❌! File containing an ${chalk.red('edge function bundle')} does not exist!`);
         return;
       }
 
       if (argv.input) {
         if (!fs.existsSync(argv.input)) {
-          console.log(`The ${chalk.red('input JSON file')} does not exist!`);
+          console.log(`Oh no ❌! The ${chalk.red('input JSON file')} does not exist!`);
           return;
         }
 
@@ -65,13 +65,13 @@ File needs to be in the format:
       try {
         script.runInNewContext(context);
       } catch (error) {
-        console.log(`Looks like there was an ${chalk.red('error in your edge function bundle')}:\n`)
+        console.log(`Oh no ❌! Looks like there was an ${chalk.red('error in your edge function bundle')}:\n`)
         console.log(error);
         return;
       }
 
       if (!Array.isArray(context.middleware)) {
-        console.log(`Your edge function bundle doesn\'t ${chalk.red('export an array of middleware')} functions.`);
+        console.log(`Oh no ❌! Your edge function bundle doesn\'t ${chalk.red('export an array of middleware')} functions.`);
         return;
       }
 

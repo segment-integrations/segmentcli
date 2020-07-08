@@ -13,12 +13,10 @@ export class EdgeFunctionAPI implements EdgeFunctionService {
     const params = {
       Body: fs.createReadStream(file),
       Bucket: 'edgefn',
-      Key: 'real-bundle.js',
+      Key: 'edgefn-bundle.js',
       ACL: 'public-read',
     };
 
-    const result = await client.putObject(params).promise();
-
-    console.log(result);
+    await client.putObject(params).promise();
   }
 }
