@@ -1,3 +1,3 @@
 export interface EdgeFunctionService {
-  upload(): Promise<void>;
+  upload(file: string): Promise<void>;
 }
