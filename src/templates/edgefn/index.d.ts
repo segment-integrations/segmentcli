@@ -60,5 +60,5 @@ declare namespace Analytics {
    * the event or choose to return `null` to skip sending this event
    * to segment.
    */
-  export type Middleware = (event: Event) => Promise<Event> | Event |  null
+  export type Middleware = (event: Event) => Event |  null
 }
