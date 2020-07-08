@@ -73,15 +73,10 @@ export function initialize(): CommandModule {
         })
     ),
     handler: async (argv: any) => {
-      console.log('InitCommand: ', argv);
-
       const templateDir = path.resolve(__dirname, '../../templates/edgefn');
       const newDir  = path.resolve(process.cwd(), argv.bundleName);
 
-      console.log('Writing template...');
       await fsExtra.copy(templateDir, newDir);
-
-      console.log('Writing configs...');
       await fsExtra.outputJSON(path.resolve(newDir, 'package.json'), basePackageJSON);
       await fsExtra.outputJSON(path.resolve(newDir, 'tsconfig.json'), baseTSConfig);
     },
