@@ -1,0 +1,11 @@
+{
+  "input": {
+    "test": 1,
+    "balloon": {
+      "sendTheKittens": "hades"
+    }
+  },
+  "output": {
+    "test": 1
+  }
+}

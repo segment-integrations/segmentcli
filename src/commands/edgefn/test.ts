@@ -4,6 +4,11 @@ import vm from 'vm';
 import { CommandModule } from 'yargs';
 import chalk from 'chalk';
 
+interface TestJSON {
+  input?: any;
+  output?: any;
+}
+
 export function initialize(): CommandModule {
   return {
     command: 'test <jsBundle>',
@@ -15,13 +20,7 @@ export function initialize(): CommandModule {
         })
         .option('input', {
           type: 'string',
-          desc: 'Location of an input JSON file to feed through the bundle',
-          implies: 'output',
-        })
-        .option('output', {
-          type: 'string',
-          desc: 'The expected output JSON given the included input',
-          implies: 'input',
+          desc: 'Location of JSON file to feed through the bundle',
         })
         .option('verbose', {
           type: 'boolean',
@@ -30,31 +29,33 @@ export function initialize(): CommandModule {
         })
     ),
     handler: (argv: any) => {
-      let input = {};
-      let output = {};
+      let testFile: TestJSON = {};
 
       if (!fs.existsSync(argv.jsBundle)) {
-        console.log(`The ${chalk.red('edge function bundle')} does not exist!`);
+        console.log(`File containing an ${chalk.red('edge function bundle')} does not exist!`);
         return;
       }
 
-      if (argv.input || argv.output) {
-        let valid = true;
+      if (argv.input) {
         if (!fs.existsSync(argv.input)) {
           console.log(`The ${chalk.red('input JSON file')} does not exist!`);
-          valid = false;
-        } else {
-          input = require(path.resolve(argv.input));
+          return;
         }
 
-        if (!fs.existsSync(argv.output)) {
-          console.log(`The ${chalk.red('output JSON file')} does not exist!`);
-          valid = false;
-        } else {
-          output = require(path.resolve(argv.output));
-        }
+        testFile = require(path.resolve(argv.input));
 
-        if (!valid) return;
+        if (!testFile.input || testFile.output === undefined) {
+          console.log(`
+Input JSON ${chalk.red('not')} in the ${chalk.red('correct format')}!
+
+File needs to be in the format:
+{
+  "input": {},
+  "output": {}
+}
+          `);
+          return;
+        }
       }
 
       const jsBundle = fs.readFileSync(path.resolve(argv.jsBundle), 'utf8');
@@ -75,7 +76,7 @@ export function initialize(): CommandModule {
       }
 
       if (argv.input || argv.output) {
-        let result = Object.assign({}, input);
+        let result = Object.assign({}, testFile.input);
 
         if (argv.verbose) {
           console.log(`Input: ${JSON.stringify(result, null, 2)}`);
@@ -89,12 +90,12 @@ export function initialize(): CommandModule {
           }
         }
 
-        if (JSON.stringify(result) !== JSON.stringify(output)) {
+        if (JSON.stringify(result) !== JSON.stringify(testFile.output)) {
           console.log(`
 Invalid output! ❌
 
 Expected output to be:
-${chalk.green(JSON.stringify(output, null, 2))}
+${chalk.green(JSON.stringify(testFile.output, null, 2))}
 
 But received:
 ${chalk.red(JSON.stringify(result, null, 2))}
@@ -103,7 +104,7 @@ ${chalk.red(JSON.stringify(result, null, 2))}
           return;
         }
       } else {
-        console.log('Only checking file structure...');
+        console.log(`Only checking file structure. Use ${chalk.magenta('--input')} to provide a test file.`);
       }
 
       console.log(`
