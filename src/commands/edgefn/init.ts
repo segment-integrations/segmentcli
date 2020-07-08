@@ -2,6 +2,7 @@ import { CommandModule } from 'yargs';
 import fsExtra from 'fs-extra';
 import path from 'path';
 import process from 'process';
+import chalk from 'chalk';
 
 const basePackageJSON = {
   name: 'edgefn-sample',
@@ -79,6 +80,16 @@ export function initialize(): CommandModule {
       await fsExtra.copy(templateDir, newDir);
       await fsExtra.outputJSON(path.resolve(newDir, 'package.json'), basePackageJSON);
       await fsExtra.outputJSON(path.resolve(newDir, 'tsconfig.json'), baseTSConfig);
+
+      console.log(`
+Your new ${chalk.green('edge function')} project is ${chalk.green('ready for editing')}! 🎉
+
+Open ${chalk.yellow(`${argv.bundleName}/README.md`)} in your favourite editor to learn more.
+
+Or, run the below command to compile the sample version:
+
+${chalk.magenta(`cd ${argv.bundleName} && yarn install && yarn build`)}
+      `);
     },
   };
 }
