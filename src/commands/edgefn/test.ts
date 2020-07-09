@@ -71,7 +71,7 @@ File needs to be in the format:
       }
 
       if (!Array.isArray(context.middleware)) {
-        console.log(`Oh no ❌! Your edge function bundle doesn\'t ${chalk.red('export an array of middleware')} functions.`);
+        console.log(`Oh no ❌! Your edge function bundle doesn't ${chalk.red('export an array of middleware')} functions.`);
         return;
       }
 
@@ -112,7 +112,7 @@ ${chalk.green('Passed! 🎉')}
 
 Use the below command to upload this bundle to the web:
 
-${chalk.magenta('segmentcli edgefn upload <jsBundle>')}
+${chalk.magenta(`segmentcli edgefn upload ${argv.jsBundle}`)}
       `);
     },
   };
