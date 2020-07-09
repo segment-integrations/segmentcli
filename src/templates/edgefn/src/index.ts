@@ -17,6 +17,7 @@ function addMyObject(event: Analytics.Event) {
   return event;
 }
 
+// TODO: comment about null
 function dropEvent(event: Analytics.Event) {
   const wifi: boolean = false;
   if (wifi) {

@@ -65,7 +65,7 @@ File needs to be in the format:
       try {
         script.runInNewContext(context);
       } catch (error) {
-        console.log(`Oh no ❌! Looks like there was an ${chalk.red('error in your edge function bundle')}:\n`)
+        console.log(`Oh no ❌! Looks like there was an ${chalk.red('error in your edge function bundle')}:\n`);
         console.log(error);
         return;
       }
@@ -75,7 +75,7 @@ File needs to be in the format:
         return;
       }
 
-      if (argv.input || argv.output) {
+      if (argv.input) {
         let result = Object.assign({}, testFile.input);
 
         if (argv.verbose) {
