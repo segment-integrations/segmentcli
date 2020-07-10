@@ -19,8 +19,8 @@ function addMyObject(event: Analytics.Event) {
   return event;
 }
 
-function dropEventWifiEvents(event: Analytics.Event) {
-  const wifi: boolean = get(event, 'event.context.network.wifi', false);
+function dropWifiEvents(event: Analytics.Event) {
+  const wifi: boolean = get(event, 'context.network.wifi', false);
 
   if (wifi) {
     return null;
@@ -33,7 +33,7 @@ const middleware: Analytics.Middleware[] = [
   changeTestValue,
   addMyObject,
   addValue,
-  dropEventWifiEvents,
+  dropWifiEvents,
 ];
 
 export default middleware;

@@ -1,11 +1,20 @@
 {
   "input": {
-    "test": 1,
-    "balloon": {
-      "sendTheKittens": "hades"
-    }
+    "context": {
+      "test": 1,
+      "balloon": {
+        "sendTheKittens": "hades"
+      },
+      "network": {
+        "wifi": true
+      }
+    },
+    "properties": {},
+    "integrations": {}
   },
   "output": {
-    "test": 1
+    "test": 1,
+    "properties": {},
+    "integrations": {}
   }
 }
