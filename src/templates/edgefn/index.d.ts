@@ -1,7 +1,8 @@
 declare namespace Analytics {
 
   type EventContext = {
-
+    [key: string]: any;
+    
     /** Contains details about the app being tracked */
     app: {
       build: string;
@@ -40,9 +41,16 @@ declare namespace Analytics {
     traits: any;
   }
 
+  export type EventProperties = {
+    [key: string]: any;
+  }
+
+  export type EventIntegrations = {
+    [key: string]: any;
+  }
+
   /** An event that gets fired by the Segment Analytics libraries */
   export type Event = {
-    [key: string]: any;
     anonymousId: string;
     event: string;
     messageId: string;
@@ -51,8 +59,8 @@ declare namespace Analytics {
     userId: string;
 
     context: EventContext;
-    integrations: any;
-    properties: any;
+    integrations: EventIntegrations;
+    properties: EventProperties;
   }
 
   /** 

@@ -1,15 +1,17 @@
+import get from 'lodash/get';
+
 function changeTestValue(event: Analytics.Event) {
-  event.test = 2;
+  event.context.test = 2;
   return event;
 }
 
 function addValue(event: Analytics.Event) {
-  event.cats = 'gross';
+  event.context.cats = 'gross';
   return event;
 }
 
 function addMyObject(event: Analytics.Event) {
-  event.myObject = {
+  event.context.myObject = {
     booya: 1,
     picard: '<facepalm>',
   };
@@ -17,21 +19,21 @@ function addMyObject(event: Analytics.Event) {
   return event;
 }
 
-// TODO: comment about null
-function dropEvent(event: Analytics.Event) {
-  const wifi: boolean = false;
+function dropEventWifiEvents(event: Analytics.Event) {
+  const wifi: boolean = get(event, 'event.context.network.wifi', false);
+
   if (wifi) {
-    return event;
+    return null;
   }
 
-  return null;
+  return event;
 }
 
 const middleware: Analytics.Middleware[] = [
   changeTestValue,
   addMyObject,
   addValue,
-  dropEvent,
+  dropEventWifiEvents,
 ];
 
 export default middleware;
