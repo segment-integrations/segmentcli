@@ -6,25 +6,28 @@ import chalk from 'chalk'
 
 export function initialize(api: EdgeFunctionService): CommandModule {
   return {
-    command: 'upload <workspace_name> <source_name> <jsBundle>',
+    command: 'upload',
     describe: 'Uploads the bundle, and makes it available for devices to download',
     builder: cmd => (
       cmd
-        .positional('workspace_name', {
+        .option('workspace-name', {
+          alias: 'w',
           desc: 'workspace name to which the source belongs',
           demandOption: true,
         })
-        .positional('source_name', {
+        .option('source-name', {
+          alias: 's',
           desc: 'source name',
           demandOption: true,
         })
-        .positional('jsBundle', {
+        .option('bundle', {
+          alias: 'b',
           desc: 'edge function JS bundle',
           demandOption: true,
         })
     ),
     handler: async (argv: any) => {
-      const filePath = path.resolve(argv.jsBundle)
+      const filePath = path.resolve(argv.bundle)
 
       if (!fs.existsSync(filePath)) {
         console.log(`${ chalk.red('Oh no ❌! That edge function bundle does not exist.') }`)
@@ -32,7 +35,7 @@ export function initialize(api: EdgeFunctionService): CommandModule {
       }
 
       try {
-        const resp = await api.upload(argv.workspace_name, argv.source_name, filePath)
+        const resp = await api.upload(argv['workspace-name'], argv['source-name'], filePath)
         console.log(`
 ${ chalk.green('Success') } 🎉!
 
