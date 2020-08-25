@@ -3,6 +3,7 @@ import { EdgeFunctionService } from '../../types'
 import fs from 'fs'
 import path from 'path'
 import chalk from 'chalk'
+import ora from 'ora'
 
 export function initialize(api: EdgeFunctionService): CommandModule {
   return {
@@ -34,18 +35,18 @@ export function initialize(api: EdgeFunctionService): CommandModule {
         return
       }
 
+      const spinner = ora('Uploading Edge Function bundle').start()
       try {
         const resp = await api.upload(argv['workspace-name'], argv['source-name'], filePath)
-        console.log(`
-${ chalk.green('Success') } 🎉!
+        spinner.succeed(` ${ chalk.green('Success') } 🎉!
 
-Your bundle is ${ chalk.green('now usable') } on edge devices and is viewable at ${chalk.blue(resp.download_url)}. See our ${ chalk.green('docs below') } for instructions
-about how to use it on edge devices:
+Your bundle is ${ chalk.green('now usable') } on edge devices and is viewable at ${chalk.blue(resp.download_url)}.
+See our ${ chalk.green('docs below') } for instructions about how to use it on edge devices:
 
 ${ chalk.yellow('https://segment.com/docs/connections/sources/catalog') }
       `)
       } catch (error) {
-        console.log(`${chalk.red('Oh no ❌! Looks like there was a problem uploading your edge function bundle.')}`)
+        spinner.fail(`${chalk.red('Oh no ❌! Looks like there was a problem uploading your edge function bundle.')}`)
         return
       }
 

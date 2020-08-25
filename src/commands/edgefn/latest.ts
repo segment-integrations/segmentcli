@@ -1,6 +1,7 @@
-import { EdgeFunctionService } from '../../types';
-import { CommandModule } from 'yargs';
-import chalk from 'chalk';
+import { EdgeFunction, EdgeFunctionService } from '../../types'
+import { CommandModule } from 'yargs'
+import chalk from 'chalk'
+import ora from 'ora'
 
 export function initialize(api: EdgeFunctionService): CommandModule {
   return {
@@ -20,12 +21,18 @@ export function initialize(api: EdgeFunctionService): CommandModule {
         })
     ),
     handler: async (argv: any) => {
+      const spinner = ora('Fetching Edge Functions').start();
       try {
-        const resp = await api.latest(argv['workspace-name'], argv['source-name'])
-        console.log(`${ chalk.green(JSON.stringify(resp, null, 4)) }`)
+        const resp: EdgeFunction = await api.latest(argv['workspace-name'], argv['source-name'])
+        spinner.stop()
+        spinner.succeed(` ${chalk.green('Here is the latest Edge Function')}
+${chalk.bold('Version             :')} ${chalk.blue(resp.version)}
+${chalk.bold('Created At          :')} ${chalk.blue(resp.created_at)}
+${chalk.bold('Bundle Download URL :')} ${chalk.blue(resp.download_url)}
+${chalk.bold('Source ID           :')} ${chalk.blue(resp.source_id)}
+`)
       } catch (error) {
-        console.log(`${ chalk.red('Oh no ❌! Looks like there was a problem fetching your latest edge function.') }`)
-        return
+        spinner.fail(`${ chalk.red('Oh no ❌! Looks like there was a problem fetching your latest edge function.') }`)
       }
     },
   }
