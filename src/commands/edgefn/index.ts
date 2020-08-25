@@ -18,8 +18,8 @@ export function initialize(api: EdgeFunctionService): CommandModule {
         .command(UploadCommand.initialize(api))
         .demandCommand(1, 'Command required')
     ),
-    handler: (argv: any) => {
-      console.log('edgefn: ', argv);
+    handler: (_: any) => {
+      console.log('unrecognized command');
     },
   };
 }

@@ -7,7 +7,7 @@ import chalk from 'chalk'
 export function initialize(api: EdgeFunctionService): CommandModule {
   return {
     command: 'upload <workspace_name> <source_name> <jsBundle>',
-    describe: 'Uploads the bundle',
+    describe: 'Uploads the bundle, and makes it available for devices to download',
     builder: cmd => (
       cmd
         .positional('workspace_name', {
