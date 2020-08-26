@@ -33,6 +33,7 @@ ${chalk.bold('Source ID           :')} ${chalk.blue(resp.source_id)}
 `)
       } catch (error) {
         spinner.fail(`${ chalk.red('Oh no ❌! Looks like there was a problem fetching your latest edge function.') }`)
+        console.log(`${error}`)
       }
     },
   }

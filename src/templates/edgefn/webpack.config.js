@@ -3,7 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: './src/index.ts',
-  mode: 'development',
+  mode: 'development', // switch to production when ready
   module: {
     rules: [
       {
@@ -22,7 +22,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    library: 'middleware',
+    library: 'edge_function',
     libraryExport: 'default'
   },
 };

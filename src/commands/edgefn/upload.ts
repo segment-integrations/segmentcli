@@ -47,6 +47,7 @@ ${ chalk.yellow('https://segment.com/docs/connections/sources/catalog') }
       `)
       } catch (error) {
         spinner.fail(`${chalk.red('Oh no ❌! Looks like there was a problem uploading your edge function bundle.')}`)
+        console.log(`${error}`)
         return
       }
 

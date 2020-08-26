@@ -22,6 +22,9 @@ export class EdgeFunctionAPI implements EdgeFunctionService {
         },
         body: '{}',
       })
+    if (generateUrlResp.status === 403) {
+      throw new Error(this.badTokenMsg())
+    }
     if (generateUrlResp.status !== 200) {
       throw new Error(`error generating upload url, statusCode=${ generateUrlResp.status }`)
     }
@@ -33,6 +36,9 @@ export class EdgeFunctionAPI implements EdgeFunctionService {
       method: 'PUT',
       body: fileBody,
     })
+    if (uploadResp.status === 403) {
+      throw new Error(this.badTokenMsg())
+    }
     if (uploadResp.status !== 200) {
       throw new Error(`error uploading javascript bundle errorCode=${ uploadResp.status }`)
     }
@@ -49,6 +55,9 @@ export class EdgeFunctionAPI implements EdgeFunctionService {
           upload_url: "${ uploadUrl }",
         }`,
       })
+    if (createResp.status === 403) {
+      throw new Error(this.badTokenMsg())
+    }
     if (createResp.status !== 200) {
       throw new Error(
         `error creating edge function for workspaces/${ workspaceName }/sources/${ sourceName } and uploadUrl=${ uploadUrl }`,
@@ -67,10 +76,16 @@ export class EdgeFunctionAPI implements EdgeFunctionService {
           Authorization: `Bearer ${ token }`,
         },
       })
+    if (response.status === 403) {
+      throw new Error(this.badTokenMsg())
+    }
     if (response.status !== 200) {
       throw new Error(`error fetching latest edge function, statusCode=${ response.status }`)
     }
     return await response.json()
   }
 
+  private badTokenMsg(): string {
+    return 'An error occurred trying to communicate to Segment, please check your auth-token or ensure your workspace has edge-functions enabled'
+  }
 }
