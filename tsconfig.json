@@ -5,7 +5,7 @@
       "sourceMap": false,
       "outDir": "./dist",
       "rootDir": "./src",
-  
+
       "strict": true,
       "noImplicitAny": true,
       "strictNullChecks": true,
@@ -14,10 +14,10 @@
       "strictPropertyInitialization": true,
       "noImplicitThis": true,
       "alwaysStrict": true,
-  
+
       "noUnusedLocals": true,
       "noImplicitReturns": true,
-  
+
       "moduleResolution": "node",
       "rootDirs": ["src"],
       "typeRoots": ["node_modules/@types/"],
@@ -28,7 +28,7 @@
     "exclude": [
       "node_modules",
       "src/templates",
-      "dist"
+      "dist",
+      "bundles"
     ]
   }
-  

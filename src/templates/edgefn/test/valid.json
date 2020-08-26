@@ -12,5 +12,26 @@
     "properties": {},
     "integrations": {}
   },
-  "output": null
+  "output": {
+    "Segment.io": {
+      "context": {
+        "test": 2,
+        "balloon": {
+          "sendTheKittens": "hades"
+        },
+        "network": {
+          "wifi": true
+        },
+        "cats": "gross",
+        "myObject": {
+          "booya": 1,
+          "picard": "<facepalm>"
+        },
+        "dogs": "tha bomb"
+      },
+      "properties": {},
+      "integrations": {}
+    },
+    "appboy": null
+  }
 }

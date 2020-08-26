@@ -2,7 +2,7 @@ declare namespace Analytics {
 
   type EventContext = {
     [key: string]: any;
-    
+
     /** Contains details about the app being tracked */
     app: {
       build: string;
@@ -10,7 +10,7 @@ declare namespace Analytics {
       namespace: string;
       version: string;
     };
-    
+
     /** Contains details about the device that generated this event */
     device: {
       id: string;
@@ -63,10 +63,21 @@ declare namespace Analytics {
     properties: EventProperties;
   }
 
-  /** 
+  /**
    * A function that receives an analytics event and can either modify
    * the event or choose to return `null` to skip sending this event
    * to segment.
    */
   export type Middleware = (event: Event) => Event |  null
+
+  /**
+   * A function that receives an analytics event and can either modify
+   * the event or choose to return `null` to skip sending this event
+   * to segment.
+   */
+  export type SourceMiddlewareList = Middleware[]
+
+  export type DestinationMiddlewareList = {
+    [key: string]: Middleware[];
+  }
 }

@@ -75,7 +75,7 @@ export function initialize(): CommandModule {
     ),
     handler: async (argv: any) => {
       const templateDir = path.resolve(__dirname, '../../templates/edgefn');
-      const newDir  = path.resolve(process.cwd(), argv.bundleName);
+      const newDir  = path.resolve(process.cwd(), 'bundles/', argv.bundleName);
 
       await fsExtra.copy(templateDir, newDir);
       await fsExtra.outputJSON(path.resolve(newDir, 'package.json'), basePackageJSON);
@@ -84,11 +84,11 @@ export function initialize(): CommandModule {
       console.log(`
 Your new ${chalk.green('edge function')} project is ${chalk.green('ready for editing')}! 🎉
 
-Open ${chalk.yellow(`${argv.bundleName}/README.md`)} in your favourite editor to learn more.
+Open ${chalk.yellow(`bundles/${argv.bundleName}/README.md`)} in your favourite editor to learn more.
 
 Or, run the below command to compile the sample version:
 
-${chalk.magenta(`cd ${argv.bundleName} && yarn install && yarn build`)}
+${chalk.magenta(`cd bundles/${argv.bundleName} && yarn install && yarn build`)}
       `);
     },
   };
