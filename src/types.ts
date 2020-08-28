@@ -18,6 +18,7 @@ export interface Config {
 export interface EdgeFunctionService {
   upload(workspaceName: string, sourceName: string, file: string): Promise<EdgeFunction>;
   latest(workspaceName: string, sourceName: string): Promise<EdgeFunction>;
+  disable(workspaceName: string, sourceName: string): Promise<EdgeFunction>;
 }
 
 export interface ConfigReader {

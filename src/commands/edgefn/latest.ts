@@ -28,7 +28,7 @@ export function initialize(api: EdgeFunctionService): CommandModule {
         spinner.succeed(` ${chalk.green('Here is the latest Edge Function')}
 ${chalk.bold('Version             :')} ${chalk.blue(resp.version)}
 ${chalk.bold('Created At          :')} ${chalk.blue(resp.created_at)}
-${chalk.bold('Bundle Download URL :')} ${chalk.blue(resp.download_url)}
+${chalk.bold('Bundle Download URL :')} ${chalk.blue(resp.download_url || '')}
 ${chalk.bold('Source ID           :')} ${chalk.blue(resp.source_id)}
 `)
       } catch (error) {

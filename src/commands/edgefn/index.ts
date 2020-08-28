@@ -3,6 +3,7 @@ import * as InitCommand from './init';
 import * as UploadCommand from './upload';
 import * as GetLatestCommand from './latest';
 import * as TestCommand from './test';
+import * as DisableCommand from './disable';
 import { EdgeFunctionService } from '../../types';
 import chalk from 'chalk';
 
@@ -16,6 +17,7 @@ export function initialize(api: EdgeFunctionService): CommandModule {
         .command(TestCommand.initialize())
         .command(GetLatestCommand.initialize(api))
         .command(UploadCommand.initialize(api))
+        .command(DisableCommand.initialize(api))
         .demandCommand(1, 'Command required')
     ),
     handler: (_: any) => {

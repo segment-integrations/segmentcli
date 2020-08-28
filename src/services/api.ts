@@ -2,7 +2,7 @@ import { ConfigReader, EdgeFunction, EdgeFunctionService, GenerateUploadURL } fr
 import fetch from 'node-fetch'
 import fs from 'fs'
 
-const BASE_URL = 'https://platform.segmentapis.com'
+const BASE_URL = 'https://platform.segmentapis.build'
 
 export class EdgeFunctionAPI implements EdgeFunctionService {
   private configReader: ConfigReader
@@ -81,6 +81,25 @@ export class EdgeFunctionAPI implements EdgeFunctionService {
     }
     if (response.status !== 200) {
       throw new Error(`error fetching latest edge function, statusCode=${ response.status }`)
+    }
+    return await response.json()
+  }
+
+  public async disable(workspaceName: string, sourceName: string): Promise<EdgeFunction> {
+    const token = (await this.configReader.fetch()).token
+    const response = await fetch(
+      `${ BASE_URL }/v1beta/workspaces/${ workspaceName }/sources/${ sourceName }/edge-functions/disable`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${ token }`,
+        },
+      })
+    if (response.status === 403) {
+      throw new Error(this.badTokenMsg())
+    }
+    if (response.status !== 200) {
+      throw new Error(`error disabling edge function, statusCode=${ response.status }`)
     }
     return await response.json()
   }
