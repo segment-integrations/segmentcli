@@ -85,6 +85,25 @@ export class EdgeFunctionAPI implements EdgeFunctionService {
     return await response.json()
   }
 
+  public async disable(workspaceName: string, sourceName: string): Promise<EdgeFunction> {
+    const token = (await this.configReader.fetch()).token
+    const response = await fetch(
+      `${ BASE_URL }/v1beta/workspaces/${ workspaceName }/sources/${ sourceName }/edge-functions/disable`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${ token }`,
+        },
+      })
+    if (response.status === 403) {
+      throw new Error(this.badTokenMsg())
+    }
+    if (response.status !== 200) {
+      throw new Error(`error disabling edge function, statusCode=${ response.status }`)
+    }
+    return await response.json()
+  }
+
   private badTokenMsg(): string {
     return 'An error occurred trying to communicate to Segment, please check your auth-token or ensure your workspace has edge-functions enabled'
   }
