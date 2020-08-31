@@ -71,16 +71,16 @@ File needs to be in the format:
         return
       }
 
-      if (typeof context.middleware !== 'object') {
-        console.log(`Oh no ❌! Your edge function bundle doesn't ${ chalk.red('export an middlewares') } functions.
+      if (typeof context.edge_function !== 'object') {
+        console.log(`Oh no ❌! Your edge function bundle doesn't ${ chalk.red('export an edge_function') } object.
 ${ chalk.yellow('Ensure that you configured the webpack properly') }`)
         return
       }
-      if (!Array.isArray(context.middleware.sourceMiddleware)) {
+      if (!Array.isArray(context.edge_function.sourceMiddleware)) {
         console.log(`Oh no ❌! Your edge function bundle doesn't ${ chalk.red('export an array of sourceMiddleware') } functions.`)
         return
       }
-      if (!context.middleware.destinationMiddleware) {
+      if (!context.edge_function.destinationMiddleware) {
         console.log(`Oh no ❌! Your edge function bundle doesn't ${ chalk.red('export a dictionary of destinationMiddleware') } functions.`)
         return
       }
@@ -93,7 +93,7 @@ ${ chalk.yellow('Ensure that you configured the webpack properly') }`)
         }
 
         // Run All sourceMiddleware functions
-        for (const func of context.middleware.sourceMiddleware) {
+        for (const func of context.edge_function.sourceMiddleware) {
           result = func(result)
 
           if (argv.verbose) {
@@ -104,9 +104,9 @@ ${ chalk.yellow('Ensure that you configured the webpack properly') }`)
         const testResult: any = {}
 
         // Run All destinationMiddleware functions
-        for (const destination of Object.keys(context.middleware.destinationMiddleware)) {
+        for (const destination of Object.keys(context.edge_function.destinationMiddleware)) {
           let destinationResult = Object.assign({}, result)
-          const funcList = context.middleware.destinationMiddleware[destination]
+          const funcList = context.edge_function.destinationMiddleware[destination]
 
           // Run singular destination's middleware
           for (const func of funcList) {
