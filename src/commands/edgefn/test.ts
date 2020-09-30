@@ -3,6 +3,7 @@ import path from 'path'
 import vm from 'vm'
 import { CommandModule } from 'yargs'
 import chalk from 'chalk'
+import { diffString } from 'json-diff'
 
 interface TestJSON {
   input?: any
@@ -127,14 +128,9 @@ ${ chalk.yellow('Ensure that you configured the webpack properly') }`)
         // Validate
         if (JSON.stringify(testResult) !== JSON.stringify(testFile.output)) { // todo switch this out for a better comparison
           console.log(`
-Invalid output! ❌
-
-Expected output to be:
-${ chalk.green(JSON.stringify(testFile.output, null, 2)) }
-
-But received:
-${ chalk.red(JSON.stringify(testResult, null, 2)) }
-          `)
+❌ Invalid output! ❌
+${diffString(testResult, testFile.output)}
+`)
 
           return
         }

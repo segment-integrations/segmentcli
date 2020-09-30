@@ -20,12 +20,14 @@
     "aws-sdk": "^2.712.0",
     "chalk": "^4.1.0",
     "fs-extra": "^9.0.1",
+    "json-diff": "^0.5.4",
     "node-fetch": "^2.6.0",
     "ora": "^5.0.0",
     "yargs": "^15.4.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.1",
+    "@types/json-diff": "^0.5.0",
     "@types/node": "^14.0.20",
     "@types/node-fetch": "^2.5.7",
     "@types/yargs": "^15.0.5",
