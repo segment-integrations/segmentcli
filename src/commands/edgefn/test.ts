@@ -4,6 +4,8 @@ import vm from 'vm'
 import { CommandModule } from 'yargs'
 import chalk from 'chalk'
 import { diffString } from 'json-diff'
+import cloneDeep from 'lodash.clonedeep'
+import isDeepEqual from 'lodash.isequal'
 
 interface TestJSON {
   input?: any
@@ -106,7 +108,7 @@ ${ chalk.yellow('Ensure that you configured the webpack properly') }`)
 
         // Run All destinationMiddleware functions
         for (const destination of Object.keys(context.edge_function.destinationMiddleware)) {
-          let destinationResult = Object.assign({}, result)
+          let destinationResult = cloneDeep(result)
           const funcList = context.edge_function.destinationMiddleware[destination]
 
           // Run singular destination's middleware
@@ -126,7 +128,7 @@ ${ chalk.yellow('Ensure that you configured the webpack properly') }`)
         }
 
         // Validate
-        if (JSON.stringify(testResult) !== JSON.stringify(testFile.output)) { // todo switch this out for a better comparison
+        if (!isDeepEqual(testResult, testFile.output)) {
           console.log(`
 ❌ Invalid output! ❌
 ${diffString(testResult, testFile.output)}
