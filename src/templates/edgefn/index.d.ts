@@ -68,7 +68,7 @@ declare namespace Analytics {
    * the event or choose to return `null` to skip sending this event
    * to segment.
    */
-  export type Middleware = (event: Event) => Event |  null
+  export type Middleware = (event: Event) => Event | null
 
   /**
    * A function that receives an analytics event and can either modify
@@ -80,4 +80,10 @@ declare namespace Analytics {
   export type DestinationMiddlewareList = {
     [key: string]: Middleware[];
   }
+
+  export type DataBridge = {
+    [key: string]: any;
+  }
 }
+
+declare var dataBridge: Analytics.DataBridge

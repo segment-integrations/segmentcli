@@ -65,7 +65,7 @@ const baseTSConfig = {
 export function initialize(): CommandModule {
   return {
     command: 'init <bundleName>',
-    describe: 'Create a new edge function middleware bundle',
+    describe: 'Create a new edge function middleware bundle under ./bundles/',
     builder: cmd => (
       cmd
         .positional('bundleName', {
