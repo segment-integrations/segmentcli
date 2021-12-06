@@ -1,0 +1,61 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Signals",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueSignals.git",
+        "state": {
+          "branch": null,
+          "revision": "1f6c49e186c8a4eeef87ba14f2f97b8646559d13",
+          "version": "1.0.200"
+        }
+      },
+      {
+        "package": "ColorizeSwift",
+        "repositoryURL": "https://github.com/mtynior/ColorizeSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "2a354639173d021f4648cf1912b2b00a3a7cd83c",
+          "version": "1.6.0"
+        }
+      },
+      {
+        "package": "Nanoseconds",
+        "repositoryURL": "https://github.com/dominicegginton/Nanoseconds",
+        "state": {
+          "branch": null,
+          "revision": "d874aa99470f12f38a1b9315c0a481adfaacc8b5",
+          "version": "1.1.1"
+        }
+      },
+      {
+        "package": "Rainbow",
+        "repositoryURL": "https://github.com/onevcat/Rainbow",
+        "state": {
+          "branch": null,
+          "revision": "626c3d4b6b55354b4af3aa309f998fae9b31a3d9",
+          "version": "3.2.0"
+        }
+      },
+      {
+        "package": "Spinner",
+        "repositoryURL": "https://github.com/dominicegginton/Spinner",
+        "state": {
+          "branch": null,
+          "revision": "236a0506fdf7b17afe18551d58e785c3b44e4da1",
+          "version": "1.3.2"
+        }
+      },
+      {
+        "package": "SwiftCLI",
+        "repositoryURL": "https://github.com/jakeheis/SwiftCLI",
+        "state": {
+          "branch": null,
+          "revision": "2e949055d9797c1a6bddcda0e58dada16cc8e970",
+          "version": "6.0.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
