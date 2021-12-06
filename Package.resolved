@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Segment",
+        "repositoryURL": "https://github.com/segmentio/analytics-swift.git",
+        "state": {
+          "branch": "bsneed/cli_additions",
+          "revision": "accb888fc903ca4f2615df923c3dec896cd771af",
+          "version": null
+        }
+      },
+      {
         "package": "Signals",
         "repositoryURL": "https://github.com/IBM-Swift/BlueSignals.git",
         "state": {
@@ -38,6 +47,15 @@
         }
       },
       {
+        "package": "Sovran",
+        "repositoryURL": "https://github.com/segmentio/Sovran-Swift.git",
+        "state": {
+          "branch": null,
+          "revision": "944c17d7c46bd95fc37f09136cabd172be5b413b",
+          "version": "1.0.3"
+        }
+      },
+      {
         "package": "Spinner",
         "repositoryURL": "https://github.com/dominicegginton/Spinner",
         "state": {
@@ -53,6 +71,15 @@
           "branch": null,
           "revision": "2e949055d9797c1a6bddcda0e58dada16cc8e970",
           "version": "6.0.3"
+        }
+      },
+      {
+        "package": "SwiftCSV",
+        "repositoryURL": "https://github.com/swiftcsv/SwiftCSV.git",
+        "state": {
+          "branch": null,
+          "revision": "039cc273dcc91f4c9d85e05a2514bbe63e7dde60",
+          "version": "0.6.1"
         }
       }
     ]

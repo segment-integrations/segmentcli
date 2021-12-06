@@ -7,7 +7,9 @@ func main() {
                       description: "A command line utility to interact with and drive Segment",
                       commands: [
                         AuthCommand(),
-                        ProfileGroup()
+                        ProfileGroup(),
+                        ImportCommand(),
+                        AnalyticsGroup()
                       ])
     
     segment.globalOptions.append(specifiedProfileKey)
