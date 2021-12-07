@@ -93,6 +93,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "analytics track Sf37SZu7TfysLklHCahTo5HlSP9m9O6h someGoofyEvent myBool=true myNumber=5 myFloat=3.14 myString=&quot;get schwifty&quot;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "analytics flush Sf37SZu7TfysLklHCahTo5HlSP9m9O6h"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftCLI
+import Segment
 
 // MARK: - Helper methods
 
@@ -48,3 +49,14 @@ func exitWithError(_ error: Error) {
 // useful for error handling
 extension String: Error {}
 
+// MARK: - Segment helper functions
+
+func eventStorageDirectory(writeKey: String) -> URL {
+    let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+    let docURL = urls[0]
+    let segmentURL = docURL.appendingPathComponent("segment/\(writeKey)/")
+    // try to create it, will fail if already exists, nbd.
+    // tvOS, watchOS regularly clear out data.
+    try? FileManager.default.createDirectory(at: segmentURL, withIntermediateDirectories: true, attributes: nil)
+    return segmentURL
+}
