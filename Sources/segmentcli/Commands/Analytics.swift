@@ -93,7 +93,7 @@ class AnalyticsTrackCommand: Command {
         }
         
         spinner.stop()
-        print("Event `\(eventName)` sent!\n")
+        print("Track event `\(eventName)` sent!\n")
     }
 }
 
@@ -102,7 +102,7 @@ class AnalyticsIdentifyCommand: Command {
     let shortDescription = "Send an identify event to Segment"
     
     @Param var writeKey: String
-    @Param var userID: String
+    @Param var userId: String
         
     @Flag("-f", "--flush", description: "Flush event(s) to Segment before returning")
     var flush: Bool
@@ -117,7 +117,7 @@ class AnalyticsIdentifyCommand: Command {
         analytics.waitUntilStarted()
         
         executeAndWait { semaphore in
-            analytics.identify(userId, traits: paramArryToDictionary(traits))
+            analytics.identify(userId: userId, traits: paramArryToDictionary(traits))
             // wait till we know the event has been placed in the queue
             while analytics.hasUnsentEvents == false {
                 RunLoop.main.run(until: Date.distantPast)
@@ -134,7 +134,7 @@ class AnalyticsIdentifyCommand: Command {
         }
 
         spinner.stop()
-        print("Identify Event for `\(userID)` sent!\n")
+        print("Identify event for `\(userId)` sent!\n")
     }
 }
 
@@ -143,7 +143,10 @@ class AnalyticsScreenCommand: Command {
     let shortDescription = "Send a screen event to Segment"
     
     @Param var writeKey: String
-    @Param var eventName: String
+    @Param var screenName: String
+    
+    @Key("-c", "--category", description: "Add and optional category for this Screen event")
+    var category: String?
     
     @Flag("-f", "--flush", description: "Flush event(s) to Segment before returning")
     var flush: Bool
@@ -160,7 +163,7 @@ class AnalyticsScreenCommand: Command {
         analytics.waitUntilStarted()
         
         executeAndWait { semaphore in
-            analytics.track(name: eventName, properties: paramArryToDictionary(properties))
+            analytics.screen(title: screenName, category: category)
             // wait till we know the event has been placed in the queue
             while analytics.hasUnsentEvents == false {
                 RunLoop.main.run(until: Date.distantPast)
@@ -177,7 +180,7 @@ class AnalyticsScreenCommand: Command {
         }
         
         spinner.stop()
-        print("Event `\(eventName)` sent!\n")
+        print("Screen event `\(screenName)` sent!\n")
     }
 }
 
@@ -186,15 +189,15 @@ class AnalyticsGroupCommand: Command {
     let shortDescription = "Send a group event to Segment"
     
     @Param var writeKey: String
-    @Param var eventName: String
+    @Param var groupId: String
     
     @Flag("-f", "--flush", description: "Flush event(s) to Segment before returning")
     var flush: Bool
     
-    @CollectedParam(minCount: 0, validation: keyValueValidation) var properties: [String]
+    @CollectedParam(minCount: 0, validation: keyValueValidation) var traits: [String]
     
     func execute() throws {
-        let spinner = Spinner(.dots, "Sending track event to Segment ...")
+        let spinner = Spinner(.dots, "Sending group event to Segment ...")
         spinner.start()
         
         Analytics.debugLogsEnabled = true
@@ -203,7 +206,7 @@ class AnalyticsGroupCommand: Command {
         analytics.waitUntilStarted()
         
         executeAndWait { semaphore in
-            analytics.track(name: eventName, properties: paramArryToDictionary(properties))
+            analytics.group(groupId: groupId, traits: paramArryToDictionary(traits))
             // wait till we know the event has been placed in the queue
             while analytics.hasUnsentEvents == false {
                 RunLoop.main.run(until: Date.distantPast)
@@ -220,7 +223,7 @@ class AnalyticsGroupCommand: Command {
         }
         
         spinner.stop()
-        print("Event `\(eventName)` sent!\n")
+        print("Group Event (id: \(groupId)) sent!\n")
     }
 }
 
@@ -229,15 +232,13 @@ class AnalyticsAliasCommand: Command {
     let shortDescription = "Send an alias event to Segment"
     
     @Param var writeKey: String
-    @Param var eventName: String
+    @Param var newId: String
     
     @Flag("-f", "--flush", description: "Flush event(s) to Segment before returning")
     var flush: Bool
     
-    @CollectedParam(minCount: 0, validation: keyValueValidation) var properties: [String]
-    
     func execute() throws {
-        let spinner = Spinner(.dots, "Sending track event to Segment ...")
+        let spinner = Spinner(.dots, "Sending alias event to Segment ...")
         spinner.start()
         
         Analytics.debugLogsEnabled = true
@@ -246,7 +247,7 @@ class AnalyticsAliasCommand: Command {
         analytics.waitUntilStarted()
         
         executeAndWait { semaphore in
-            analytics.track(name: eventName, properties: paramArryToDictionary(properties))
+            analytics.alias(newId: newId)
             // wait till we know the event has been placed in the queue
             while analytics.hasUnsentEvents == false {
                 RunLoop.main.run(until: Date.distantPast)
@@ -263,7 +264,7 @@ class AnalyticsAliasCommand: Command {
         }
         
         spinner.stop()
-        print("Event `\(eventName)` sent!\n")
+        print("Alias event (id: \(newId)) sent!\n")
     }
 }
 
