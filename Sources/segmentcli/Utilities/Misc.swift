@@ -33,15 +33,15 @@ func exitWithError(code: ErrorCode) {
 }
 
 func exitWithError(code: ErrorCode, message: String) {
-    fputs("\(message)\n\n", stderr)
+    fputs("Error: \(message)\n\n", stderr)
     exit(Int32(code.rawValue))
 }
 
 func exitWithError(_ error: Error) {
     if let str = error as? String {
-        fputs("\(str)\n\n", stderr)
+        fputs("Error: \(str)\n\n", stderr)
     } else {
-        fputs("\(error.localizedDescription)\n\n", stderr)
+        fputs("Error: \(error.localizedDescription)\n\n", stderr)
     }
     exit(Int32(ErrorCode.commandFailed.rawValue))
 }

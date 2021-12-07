@@ -29,6 +29,15 @@
         }
       },
       {
+        "package": "mustache",
+        "repositoryURL": "https://github.com/AlwaysRightInstitute/Mustache",
+        "state": {
+          "branch": null,
+          "revision": "880e0eeb5c42f088cbdb6fa6aa313fa41c15bca8",
+          "version": "1.0.1"
+        }
+      },
+      {
         "package": "Nanoseconds",
         "repositoryURL": "https://github.com/dominicegginton/Nanoseconds",
         "state": {
