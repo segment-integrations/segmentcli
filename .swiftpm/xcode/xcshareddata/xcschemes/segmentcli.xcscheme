@@ -95,6 +95,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "scaffold --plugin --swift"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "repl"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

@@ -10,7 +10,8 @@ func main() {
                         ProfileGroup(),
                         ImportCommand(),
                         AnalyticsGroup(),
-                        ScaffoldCommand()
+                        ScaffoldCommand(),
+                        REPLCommand()
                       ])
     
     segment.globalOptions.append(specifiedProfileKey)
