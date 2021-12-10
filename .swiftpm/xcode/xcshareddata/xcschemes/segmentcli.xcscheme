@@ -99,6 +99,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "repl"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "repl -r /Users/brandonsneed/test.js"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

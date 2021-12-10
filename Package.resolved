@@ -99,6 +99,15 @@
           "revision": "039cc273dcc91f4c9d85e05a2514bbe63e7dde60",
           "version": "0.6.1"
         }
+      },
+      {
+        "package": "SwiftJS",
+        "repositoryURL": "https://github.com/bsneed/SwiftJS.git",
+        "state": {
+          "branch": "main",
+          "revision": "36b6069fad9309949b5dc46bcb4c183b76604949",
+          "version": null
+        }
       }
     ]
   },

@@ -43,15 +43,22 @@ public final class Lox {
     }
 
     public static func runFile(path: String) throws {
-        let url = URL(fileURLWithPath: path)
-        let code = try String(contentsOf: url)
-        run(code)
+        //let runQueue = DispatchQueue(label: "segmentcli.run")
 
-        if hadError {
-            exit(65)
-        }
-        if hadRuntimeError {
-            exit(70)
+        //runQueue.async {
+            let url = URL(fileURLWithPath: path)
+            let code = try String(contentsOf: url)
+            run(code)
+
+            if hadError {
+                exit(65)
+            }
+            if hadRuntimeError {
+                exit(70)
+            }
+        //}
+        while true {
+            RunLoop.main.run(until: Date.distantPast)
         }
     }
 

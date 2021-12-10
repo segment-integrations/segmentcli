@@ -34,7 +34,7 @@ final class Interpreter: ExprVisitor, StmtVisitor {
 
     internal let globals = Environment()
     private var locals: Dictionary<Expr, Int> = [:]
-    private var environment: Environment
+    internal var environment: Environment
 
     init() {
         environment = globals
@@ -191,10 +191,12 @@ final class Interpreter: ExprVisitor, StmtVisitor {
 
         case .leftParen, .rightParen: fallthrough
         case .leftBrace, .rightBrace: fallthrough
+        case .leftBracket, .rightBracket: fallthrough
         case .comma: fallthrough
         case .dot: fallthrough
         case .plus: fallthrough
         case .semicolon: fallthrough
+        case .colon: fallthrough
         case .slash: fallthrough
         case .star: fallthrough
         case .bangEqual: fallthrough
@@ -205,6 +207,8 @@ final class Interpreter: ExprVisitor, StmtVisitor {
         case .identifier: fallthrough
         case .string: fallthrough
         case .number: fallthrough
+        case .array: fallthrough
+        case .dictionary: fallthrough
         case .and: fallthrough
         case .Class: fallthrough
         case .Else: fallthrough
@@ -307,14 +311,18 @@ final class Interpreter: ExprVisitor, StmtVisitor {
 
         case .leftParen, .rightParen: fallthrough
         case .leftBrace, .rightBrace: fallthrough
+        case .leftBracket, .rightBracket: fallthrough
         case .comma: fallthrough
         case .dot: fallthrough
         case .semicolon: fallthrough
+        case .colon: fallthrough
         case .bang: fallthrough
         case .equal: fallthrough
         case .identifier: fallthrough
         case .string: fallthrough
         case .number: fallthrough
+        case .array: fallthrough
+        case .dictionary: fallthrough
         case .and: fallthrough
         case .Class: fallthrough
         case .Else: fallthrough

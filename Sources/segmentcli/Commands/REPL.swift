@@ -8,7 +8,29 @@
 import Foundation
 import SwiftCLI
 import Segment
+//import SwiftJS
+import JavaScriptCore
 
+class REPLCommand: Command {
+    let name: String = "repl"
+    let shortDescription = "Segment virtual development environment"
+    
+    @Key("-r", "--runscript", "Runs the supplied script in the REPL")
+    var scriptFile: String?
+    
+    let jsContext = JSContext()!
+    
+    func execute() throws {
+        if let scriptFile = scriptFile {
+            runJSFile(path: scriptFile, context: jsContext)
+        } else {
+            runJSInteractive(context: jsContext)
+        }
+    }
+    
+}
+
+/*
 class REPLCommand: Command {
     let name: String = "repl"
     let shortDescription = "Segment virtual development environment"
@@ -38,6 +60,7 @@ class REPLCommand: Command {
     }
     
 }
+ */
 
 /*
 guard let writeKey = args[0] as? String else { return NilAny }

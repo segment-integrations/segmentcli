@@ -12,6 +12,7 @@ enum TokenType {
     // Single-character tokens.
     case leftParen, rightParen
     case leftBrace, rightBrace
+    case leftBracket, rightBracket
     case comma
     case dot
     case minus
@@ -19,6 +20,7 @@ enum TokenType {
     case semicolon
     case slash
     case star
+    case colon
 
     // One or two character tokens
     case bang, bangEqual
@@ -30,6 +32,8 @@ enum TokenType {
     case identifier
     case string
     case number
+    case array
+    case dictionary
 
     // Keywords
     case and

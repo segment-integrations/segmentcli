@@ -308,7 +308,17 @@ final class Parser {
         let (parameters, body) = try functionBody(kind: kind)
         return Stmt.Function(name: name, parameters: parameters, body: body)
     }
-
+    /*
+    private func array() throws -> Expr {
+        var items: Array<Token> = []
+        if !check(.rightBracket) {
+            repeat {
+                items.append(try consume(., message: "Expect parameter name."))
+            } while match(.comma)
+        }
+        try consume(.rightParen, message: "Expect ')' after parameters.")
+    }
+*/
     private func block() throws -> Array<Stmt> {
         var statements = Array<Stmt>()
 
@@ -344,6 +354,10 @@ final class Parser {
             let right = try unary()
             return Expr.Unary(op: op, right: right)
         }
+        
+        /*if match(.number, .string) {
+            return try function(kind: "array")
+        }*/
 
         return try call()
     }
@@ -415,6 +429,12 @@ final class Parser {
         if match(.leftParen) {
             let expr = try expression()
             try consume(.rightParen, message: "Expect ')' after expression.")
+            return Expr.Grouping(expression: expr)
+        }
+        
+        if match(.leftBracket) {
+            let expr = try expression()
+            try consume(.rightBracket, message: "Expect ']' after expression.")
             return Expr.Grouping(expression: expr)
         }
 

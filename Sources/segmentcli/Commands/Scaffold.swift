@@ -63,6 +63,8 @@ class ScaffoldCommand: Command {
         
         if plugin && useSwift {
             generateSwiftPlugin()
+        } else if importer {
+            generateCSVImporterScript()
         }
     }
     
@@ -94,5 +96,36 @@ class ScaffoldCommand: Command {
         }
         
         print("\n")
+    }
+    
+    func generateCSVImporterScript() {
+        guard let scaffoldName = scaffoldName else {
+            exitWithError("Could not determine a plugin name to use.")
+            return
+        }
+        
+        let filename = scaffoldName + ".js"
+        
+        print("Generating a Swift Plugin from template...")
+ 
+        for file in importer_templates_js {
+            if fileManager.fileExists(atPath: filename) {
+                let overwrite = Input.readBool(prompt: "\(filename) exists.  Overwrite? [y/N]: ", defaultValue: false)
+                if overwrite == false {
+                    exitWithError(code: .commandFailed)
+                }
+            }
+            let generate = Mustache(file)
+            let result = generate(name: scaffoldName, filename: filename)
+            do {
+                try result.write(toFile: filename, atomically: true, encoding: .utf8)
+                print("Created \(filename).")
+            } catch {
+                exitWithError("Unable to write \(filename)")
+            }
+        }
+        
+        print("\n")
+
     }
 }

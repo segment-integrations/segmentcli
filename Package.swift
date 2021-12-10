@@ -15,7 +15,8 @@ let package = Package(
         .package(url: "https://github.com/segmentio/analytics-swift.git", branch: "bsneed/cli_additions"),
         .package(url: "https://github.com/swiftcsv/SwiftCSV.git", from: "0.6.1"),
         .package(url: "https://github.com/AlwaysRightInstitute/Mustache", from: "1.0.0"),
-        .package(url: "https://github.com/antitypical/Result.git", from: "5.0.0")
+        .package(url: "https://github.com/antitypical/Result.git", from: "5.0.0"),
+        .package(url: "https://github.com/bsneed/SwiftJS.git", branch: "main")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -27,6 +28,7 @@ let package = Package(
                            "ColorizeSwift",
                            "SwiftCSV",
                            "Result",
+                           "SwiftJS",
                            .product(name: "mustache", package: "Mustache"),
                            .product(name: "Segment", package: "analytics-swift")]),
         .testTarget(

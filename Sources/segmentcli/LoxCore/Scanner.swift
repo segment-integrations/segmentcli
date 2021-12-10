@@ -51,6 +51,10 @@ final class Scanner {
             addToken(type: .leftBrace)
         case "}":
             addToken(type: .rightBrace)
+        case "[":
+            addToken(type: .leftBracket)
+        case "]":
+            addToken(type: .rightBracket)
         case ",":
             addToken(type: .comma)
         case ".":
@@ -61,6 +65,8 @@ final class Scanner {
             addToken(type: .plus)
         case ";":
             addToken(type: .semicolon)
+        case ":":
+            addToken(type: .colon)
         case "*":
             addToken(type: .star)
 

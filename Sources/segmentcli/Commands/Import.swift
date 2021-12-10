@@ -7,22 +7,22 @@
 
 import Foundation
 import SwiftCLI
+import JavaScriptCore
+import mustache
 
 class ImportCommand: Command {
     let name = "import"
     let shortDescription = "Import CSV data into Segment from"
     
-    @Param var csvFile: String
-    @Param var configFile: String
     @Param var writeKey: String
+    @Param var csvFile: String
     
-    /*
-    @Key("-csv", "--csv", description: "CSV file to read from")
-    var csvFile: String?
+    let jsContext = JSContext()!
     
-    @Key("-csvConfig", "--csvConfig", description: "A config file describing how to interpret CSV columns to event data")
-    var configFile: String?
-     */
     func execute() throws {
+        let generate = Mustache(importer_js)
+        let result = generate(name: "", writeKey: writeKey, csvFile: csvFile)
+        
+        runJS(script: result, context: jsContext)
     }
 }
