@@ -106,7 +106,7 @@ class ScaffoldCommand: Command {
         
         let filename = scaffoldName + ".js"
         
-        print("Generating a Swift Plugin from template...")
+        print("Generating a CSV Importer javascript file from template...")
  
         for file in importer_templates_js {
             if fileManager.fileExists(atPath: filename) {
