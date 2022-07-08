@@ -46,8 +46,19 @@ func exitWithError(_ error: Error) {
     exit(Int32(ErrorCode.commandFailed.rawValue))
 }
 
-// useful for error handling
-extension String: Error {}
+internal protocol Flattenable {
+    func flattened() -> Any?
+}
+
+extension Optional: Flattenable {
+    internal func flattened() -> Any? {
+        switch self {
+        case .some(let x as Flattenable): return x.flattened()
+        case .some(let x): return x
+        case .none: return nil
+        }
+    }
+}
 
 // MARK: - Segment helper functions
 
@@ -61,4 +72,19 @@ func eventStorageDirectory(writeKey: String) -> URL {
     return segmentURL
 }
 
+extension URL {
+    func appending(query queryItem: String, value: String?) -> URL {
+        guard var urlComponents = URLComponents(string: absoluteString) else { return absoluteURL }
+        var queryItems: [URLQueryItem] = urlComponents.queryItems ??  []
+        let queryItem = URLQueryItem(name: queryItem, value: value)
+        queryItems.append(queryItem)
+        urlComponents.queryItems = queryItems
+        return urlComponents.url!
+    }
+}
 
+extension String {
+    var expandingTildeInPath: String {
+        return self.replacingOccurrences(of: "~", with: FileManager.default.homeDirectoryForCurrentUser.path)
+    }
+}

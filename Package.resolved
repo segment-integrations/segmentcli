@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/segmentio/analytics-swift.git",
         "state": {
           "branch": "bsneed/cli_additions",
-          "revision": "dc609d2432add3f28c9ba4884b5df57f6819eeff",
+          "revision": "f778e2e9c19f4e3052317c5af26a4897ef77cc86",
           "version": null
         }
       },
@@ -26,6 +26,15 @@
           "branch": null,
           "revision": "2a354639173d021f4648cf1912b2b00a3a7cd83c",
           "version": "1.6.0"
+        }
+      },
+      {
+        "package": "EdgeFn",
+        "repositoryURL": "git@github.com:segmentio/EdgeFn-Swift.git",
+        "state": {
+          "branch": "main",
+          "revision": "9e7fe14e458148a8e86ac56e85d52bc13d595288",
+          "version": null
         }
       },
       {
@@ -83,6 +92,15 @@
         }
       },
       {
+        "package": "Substrata",
+        "repositoryURL": "git@github.com:segmentio/substrata-swift.git",
+        "state": {
+          "branch": "main",
+          "revision": "4b68fcf116056eab7b50bcbb1ed063972a9be136",
+          "version": null
+        }
+      },
+      {
         "package": "SwiftCLI",
         "repositoryURL": "https://github.com/jakeheis/SwiftCLI",
         "state": {
@@ -98,15 +116,6 @@
           "branch": null,
           "revision": "039cc273dcc91f4c9d85e05a2514bbe63e7dde60",
           "version": "0.6.1"
-        }
-      },
-      {
-        "package": "SwiftJS",
-        "repositoryURL": "https://github.com/bsneed/SwiftJS.git",
-        "state": {
-          "branch": "main",
-          "revision": "36b6069fad9309949b5dc46bcb4c183b76604949",
-          "version": null
         }
       }
     ]

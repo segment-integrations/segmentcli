@@ -94,6 +94,18 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "sources list"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "edgefn latest 3psnN9oWENuLqmfAtKLcKh"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "edgefn upload 3psnN9oWENuLqmfAtKLcKh ~/edgefn.js"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "scaffold --plugin --swift"
             isEnabled = "NO">
          </CommandLineArgument>
@@ -103,7 +115,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "repl -r /Users/brandonsneed/test.js"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "auth test1234"

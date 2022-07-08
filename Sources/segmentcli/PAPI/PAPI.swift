@@ -9,6 +9,10 @@ import Foundation
 
 let PAPIEndpoint: String = "https://api.segmentapis.com/"
 
+protocol PAPISection {
+    static var pathEntry: String { get }
+}
+
 class PAPI {
     enum StatusCode: Int {
         case unknown = 0
@@ -25,6 +29,9 @@ class PAPI {
     }
     
     static let shared = PAPI()
+    
+    let sources = PAPI.Sources()
+    let edgeFunctions = PAPI.EdgeFunctions()
     
     func statusCode(response: URLResponse?) -> StatusCode {
         if let httpResponse = response as? HTTPURLResponse {

@@ -11,13 +11,14 @@ func main() {
                         ImportCommand(),
                         AnalyticsGroup(),
                         ScaffoldCommand(),
-                        REPLCommand()
+                        REPLCommand(),
+                        EdgeFnGroup(),
+                        SourcesGroup()
                       ])
     
     segment.globalOptions.append(specifiedProfileKey)
     
     segment.go()
 }
-
 
 main()

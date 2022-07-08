@@ -48,7 +48,7 @@ extension Settings {
             return Settings()
         }
     }
-
+    
     func save() {
         let encoder = JSONEncoder()
         if let data = try? encoder.encode(self) {

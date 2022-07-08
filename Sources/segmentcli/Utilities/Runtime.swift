@@ -7,12 +7,18 @@
 
 import Foundation
 import Segment
-import SwiftCSV
-import JavaScriptCore
+import Substrata
 import SwiftCLI
+import EdgeFn
 
-func runJSInteractive(context jsContext: JSContext) {
-    configureJavascriptRuntime(jsContext)
+var engine = JSEngine()
+
+func hasPrefix(_ prefix: String) -> (String) -> Bool {
+    return { value in value.hasPrefix(prefix) }
+}
+
+func runJSInteractive() {
+    configureEngine()
     print("Welcome to the Segment Javascript REPL.  Type :help for assistance.")
     
     var counter = 1
@@ -20,15 +26,39 @@ func runJSInteractive(context jsContext: JSContext) {
     readQueue.async {
         while true {
             autoreleasepool {
-                let code = Input.readLine(prompt: "  \(counter)> ")
-                if code.isEmpty == false {
-                    if let result = jsContext.evaluateScript(code) {
-                        if result.isUndefined == false {
-                            print(result.description)
+                let input = Input.readLine(prompt: "  \(counter)> ")
+                switch input {
+                case _ where input.hasPrefix("< "):
+                    break
+                    
+                case _ where input.hasPrefix(":quit"):
+                    exit(0)
+                    
+                case _ where input.hasPrefix(":reset"):
+                    engine = JSEngine()
+                    configureEngine()
+                    counter = 1
+                    
+                case _ where input.hasPrefix(":print"):
+                    let variable = input.replacingOccurrences(of: ":print ", with: "")
+                    if let value = engine.object(key: variable) {
+                        print("\(variable) = \(String(describing: value))")
+                    } else {
+                        print("\(variable) = nil")
+                    }
+                    
+                case _ where input.hasPrefix(":help"):
+                    print(replHelpText)
+                    
+                default:
+                    if input.isEmpty == false {
+                        let result = engine.evaluate(script: input)
+                        if result != nil {
+                            print(result.debugDescription)
                         }
+                        counter += 1
                     }
                 }
-                counter += 1
             }
         }
     }
@@ -38,8 +68,8 @@ func runJSInteractive(context jsContext: JSContext) {
     }
 }
 
-func runJSFile(path scriptFile: String, context jsContext: JSContext) {
-    configureJavascriptRuntime(jsContext)
+func runJSFile(path scriptFile: String) {
+    configureEngine()
     
     if FileManager.default.fileExists(atPath: scriptFile) {
         do {
@@ -48,12 +78,12 @@ func runJSFile(path scriptFile: String, context jsContext: JSContext) {
             let readQueue = DispatchQueue(label: "segmentcli.js.execution")
             @Atomic var done = false
             readQueue.async {
-                jsContext.evaluateScript(code)
+                engine.evaluate(script: code)
                 done = true
             }
             // don't have a good solution to knowing when async stuff is complete yet.
             while done == false {
-                RunLoop.main.run(until: Date(timeIntervalSinceNow: 30))
+                RunLoop.main.run(until: Date(timeIntervalSinceNow: 10))
             }
         } catch {
             exitWithError(error.localizedDescription)
@@ -63,255 +93,63 @@ func runJSFile(path scriptFile: String, context jsContext: JSContext) {
     }
 }
 
-func runJS(script: String, context jsContext: JSContext) {
-    configureJavascriptRuntime(jsContext)
-    do {
-        let readQueue = DispatchQueue(label: "segmentcli.js.execution")
-        @Atomic var done = false
-        readQueue.async {
-            jsContext.evaluateScript(script)
-            done = true
-        }
-        // TODO: don't have a good solution to knowing when async stuff is complete yet.
-        while done == false {
-            RunLoop.main.run(until: Date(timeIntervalSinceNow: 30))
-        }
-    } catch {
-        exitWithError(error.localizedDescription)
+func runJS(script: String) {
+    configureEngine()
+    let readQueue = DispatchQueue(label: "segmentcli.js.execution")
+    @Atomic var done = false
+    readQueue.async {
+        engine.evaluate(script: script)
+        done = true
+    }
+    // TODO: don't have a good solution to knowing when async stuff is complete yet.
+    while done == false {
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 10))
     }
 }
 
 
-func configureJavascriptRuntime(_ jsContext: JSContext) {
-    // setup exception handling
-    jsContext.exceptionHandler = { context, exception in
-        if let exception = exception {
-            print(exception.description)
-        } else {
-            print("Error: Unknown javascript error occurred.")
+func configureEngine() {
+    engine.errorHandler = { error in
+        switch error {
+        case .evaluationError(let s):
+            print(s)
+        default:
+            print(error)
         }
     }
     
-    // make a print() function.
-    let js_print: @convention(block) (String) -> Void = { message in
-        print(message)
-    }
-    jsContext.setObject(unsafeBitCast(js_print, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)?)
+    // expose our classes
+    try? engine.expose(name: "Analytics", classType: AnalyticsJS.self)
     
-    // make the Analytics class available.
-    jsContext.setObject(JSAnalytics.self, forKeyedSubscript: "Analytics" as NSString)
+    // set the system analytics object.
+    //engine.setObject(key: "analytics", value: AnalyticsJS(wrapping: self.analytics, engine: engine))
+    
+    // setup our enum for plugin types.
+    engine.evaluate(script: EmbeddedJS.enumSetupScript)
+    engine.evaluate(script: EmbeddedJS.edgeFnBaseSetupScript)
 
-    // make the Analytics class available.
-    jsContext.setObject(JSCSV.self, forKeyedSubscript: "CSV" as NSString)
-}
-
-@objc protocol JSCSVExports: JSExport {
-    init(path: String)
-    func rowCount() -> Int
-    func rowValueForColumnName(_ row: Int, _ columnName: String) -> String?
-}
-
-@objc public class JSCSV: NSObject, JSCSVExports {
-    let csv: CSV?
     
-    required init(path: String) {
-        let url = URL(fileURLWithPath: path)
-        do {
-            self.csv = try CSV(url: url, delimiter: "|", encoding: .utf8, loadColumns: true)
-        } catch {
-            self.csv = nil
-            print("Error: \(error)")
-        }
-    }
+    //engine.expose(classType: JSCSV.self, name: "CSV")
+    //engine.expose(classType: JSAnalytics.self, name: "Analytics")
     
-    func rowCount() -> Int {
-        if let csv = csv {
-            return csv.namedRows.count
-        }
-        return 0
-    }
-    
-    func rowValueForColumnName(_ row: Int, _ columnName: String) -> String? {
-        let result = csv?.namedRows[row][columnName]
-        return result
-    }
-    
-    
-}
-
-@objc protocol JSAnalyticsExports: JSExport {
-    init(writeKey: String)
-    func track(_ name: String, _ properties: [String: Any]?)
-    func identify(_ userId: String, _ traits: [String: Any]?)
-    func flush()
-}
-
-@objc public class JSAnalytics: NSObject, JSAnalyticsExports {
-    let analytics: Analytics
-    required init(writeKey: String) {
-        self.analytics = Analytics(configuration: Configuration(writeKey: writeKey))
-    }
-    
-    func track(_ name: String, _ properties: [String : Any]?) {
-        analytics.track(name: name, properties: properties)
-    }
-    
-    func identify(_ userId: String, _ traits: [String : Any]?) {
-        analytics.identify(userId: userId, traits: traits)
-    }
-    
-    func flush() {
-        analytics.flush()
-    }
+    // set the system analytics object.
+    //engine.setObject(key: "analytics", value: JSAnalytics(wrapping: self.analytics, engine: engine))
 }
 
 
-/*
-func configureInterpeterRuntime() {
-    // Define CSV class
-    Lox.define(name: "CSV", value: AnonymousCallable(arity: 1) { interpreter, args in
-        let env = interpreter.environment
-        guard let csvFile = args[0] as? String else { return NilAny }
-        let reference = try? CSV(url: URL(fileURLWithPath: csvFile), delimiter: "|", encoding: .utf8, loadColumns: true)
-        
-        let csvClass = LoxClass(name: "CSV", superclass: nil, methods: [
-            "rowCount": LoxFunction(name: "rowCount", declaration:
-                                    Stmt.Function(name: Token(type: .fun, lexeme: "rowCount", literal: nil, line: 0),
-                                                  parameters: [],
-                                                  body: nil,
-                                                  closure: { args in
-                                                      let value = Double(reference?.namedRows.count ?? 0)
-                                                      return value
-                                                  }),
-                                    closure: Environment(enclosing: env), isInitializer: false),
-            "rowValueForColumnName": LoxFunction(name: "rowValueForColumnName", declaration:
-                                    Stmt.Function(name: Token(type: .fun, lexeme: "", literal: nil, line: 0),
-                                                  parameters: [
-                                                    Token(type: .number, lexeme: "", literal: nil, line: 0),
-                                                    Token(type: .string, lexeme: "", literal: nil, line: 0),
-                                                  ],
-                                                  body: nil,
-                                                  closure: { args in
-                                                      if let row = args[0] as? Double, let columnName = args[1] as? String {
-                                                          let result = reference?.namedRows[Int(row)][columnName]
-                                                          return result
-                                                      }
-                                                      return NilAny
-                                                  }),
-                                    closure: Environment(enclosing: env), isInitializer: false),
+let replHelpText = """
+The REPL (Read-Eval-Print-Loop) acts like an interpreter.  Valid statements,
+expressions, and declarations are immediately compiled and executed.
 
-        ])
-        let instance = LoxInstance(klass: csvClass)
-        return instance
-    })
-    
-    // Define Analytics class
-    Lox.define(name: "Analytics", value: AnonymousCallable(arity: 1) { interpreter, args in
-        let env = interpreter.environment
-        guard let writeKey = args[0] as? String else { return NilAny }
-        let reference = Analytics(configuration: Configuration(writeKey: writeKey).flushAt(1))
+Commands must be prefixed with a colon at the REPL prompt (:quit for example.)
+Typing just a colon followed by return will switch to the LLDB prompt.
 
-        let analyticsClass = LoxClass(name: "Analytics", superclass: nil, methods: [
-            "track": LoxFunction(name: "track", declaration:
-                                    Stmt.Function(name: Token(type: .fun, lexeme: "", literal: nil, line: 0),
-                                                  parameters: [
-                                                    Token(type: .string, lexeme: "", literal: nil, line: 0),
-                                                  ],
-                                                  body: nil,
-                                                  closure: { args in
-                                                      guard let arg0 = args[0] as? String else { return NilAny }
-                                                      guard arg0.isEmpty == false else { return NilAny }
-                                                      reference.track(name:arg0)
-                                                      return NilAny
-                                                  }),
-                                 closure: Environment(enclosing: env), isInitializer: false),
-            "identify": LoxFunction(name: "identify", declaration:
-                                    Stmt.Function(name: Token(type: .fun, lexeme: "", literal: nil, line: 0),
-                                                  parameters: [
-                                                    Token(type: .string, lexeme: "", literal: nil, line: 0),
-                                                  ],
-                                                  body: nil,
-                                                  closure: { args in
-                                                      guard let arg0 = args[0] as? String else { return NilAny }
-                                                      guard arg0.isEmpty == false else { return NilAny }
-                                                      reference.identify(userId:arg0)
-                                                      return NilAny
-                                                  }),
-                                 closure: Environment(enclosing: env), isInitializer: false),
-            "screen": LoxFunction(name: "screen", declaration:
-                                    Stmt.Function(name: Token(type: .fun, lexeme: "", literal: nil, line: 0),
-                                                  parameters: [
-                                                    Token(type: .string, lexeme: "", literal: nil, line: 0),
-                                                  ],
-                                                  body: nil,
-                                                  closure: { args in
-                                                      guard let arg0 = args[0] as? String else { return NilAny }
-                                                      guard arg0.isEmpty == false else { return NilAny }
-                                                      reference.screen(title:arg0)
-                                                      return NilAny
-                                                  }),
-                                 closure: Environment(enclosing: env), isInitializer: false),
-            /*"screen": LoxFunction(name: "screen", declaration:
-                                    Stmt.Function(name: Token(type: .fun, lexeme: "", literal: nil, line: 0),
-                                                  parameters: [
-                                                    Token(type: .string, lexeme: "", literal: nil, line: 0),
-                                                    Token(type: .string, lexeme: "", literal: nil, line: 0),
-                                                  ],
-                                                  body: nil,
-                                                  closure: { args in
-                                                      reference.screen(title:args[0] as! String, category: args[1] as? String)
-                                                      return NilAny
-                                                  }),
-                                 closure: Environment(), isInitializer: false),*/
-            "group": LoxFunction(name: "group", declaration:
-                                    Stmt.Function(name: Token(type: .fun, lexeme: "", literal: nil, line: 0),
-                                                  parameters: [
-                                                    Token(type: .string, lexeme: "", literal: nil, line: 0),
-                                                  ],
-                                                  body: nil,
-                                                  closure: { args in
-                                                      guard let arg0 = args[0] as? String else { return NilAny }
-                                                      guard arg0.isEmpty == false else { return NilAny }
-                                                      reference.group(groupId:arg0)
-                                                      return NilAny
-                                                  }),
-                                 closure: Environment(enclosing: env), isInitializer: false),
-            "alias": LoxFunction(name: "alias", declaration:
-                                    Stmt.Function(name: Token(type: .fun, lexeme: "", literal: nil, line: 0),
-                                                  parameters: [
-                                                    Token(type: .string, lexeme: "", literal: nil, line: 0),
-                                                  ],
-                                                  body: nil,
-                                                  closure: { args in
-                                                      guard let arg0 = args[0] as? String else { return NilAny }
-                                                      guard arg0.isEmpty == false else { return NilAny }
-                                                      reference.alias(newId:arg0)
-                                                      return NilAny
-                                                  }),
-                                 closure: Environment(enclosing: env), isInitializer: false),
-            "flush": LoxFunction(name: "flush", declaration:
-                                    Stmt.Function(name: Token(type: .fun, lexeme: "", literal: nil, line: 0),
-                                                  parameters: [],
-                                                  body: nil,
-                                                  closure: { args in
-                                                      reference.flush()
-                                                      return NilAny
-                                                  }),
-                                 closure: Environment(enclosing: env), isInitializer: false),
-            "reset": LoxFunction(name: "reset", declaration:
-                                    Stmt.Function(name: Token(type: .fun, lexeme: "", literal: nil, line: 0),
-                                                  parameters: [],
-                                                  body: nil,
-                                                  closure: { args in
-                                                      reference.reset()
-                                                      return NilAny
-                                                  }),
-                                 closure: Environment(enclosing: env), isInitializer: false),
+Type “< path” to read in code from a text file “path”.
 
-        ])
-        let instance = LoxInstance(klass: analyticsClass)
-        return instance
-    })
+Commands:
+    help            -- This help text.
+    reset           -- Perform a complete reset of the REPL.
+    quit            -- Quit the Segment REPL.
+    print <var>     -- Prints the value of <var>.
 
-}
-*/
+"""

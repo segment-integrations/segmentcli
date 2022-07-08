@@ -23,6 +23,6 @@ class ImportCommand: Command {
         let generate = Mustache(importer_js)
         let result = generate(name: "", writeKey: writeKey, csvFile: csvFile)
         
-        runJS(script: result, context: jsContext)
+        runJS(script: result)
     }
 }
