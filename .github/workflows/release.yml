@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+    - "*.*.*"
+
+permissions: write-all
+
+jobs:
+  release:
+    runs-on: macos-latest
+    environment: deployment
+    steps:
+    - uses: actions/checkout@v3
+    - name: Get tag
+      id: vars
+      run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+    - name: Build
+      run: swift build -v
+    - name: Run tests
+      run: swift test -v
+    - name: GH Release
+      # You may pin to the exact commit or the version.
+      # uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+      # see: https://github.com/softprops/action-gh-release
+      uses: softprops/action-gh-release@v0.1.15
+      with:
+        body: "Release of version ${{ env.RELEASE_VERSION }}"
+        name: ${{ env.RELEASE_VERSION }}
+        tag_name: ${{ env.RELEASE_VERSION }}
+        draft: false
+        prerelease: false
+        files:
+          "./.build/debug/segmentcli"
+        fail_on_unmatched_files: false
+        token: ${{ secrets.GITHUB_TOKEN }}
+        generate_release_notes: true
+        append_body: false
