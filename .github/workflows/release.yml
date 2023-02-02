@@ -12,8 +12,8 @@ jobs:
     runs-on: macos-latest
     environment: deployment
     steps:
-    - name: Get tag
     - uses: actions/checkout@v3
+    - name: Get tag
     - uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: |
