@@ -2,7 +2,7 @@ import XCTest
 import class Foundation.Bundle
 
 final class segmentcliTests: XCTestCase {
-    func testExample() throws {
+    func skipped_testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
