@@ -18,6 +18,7 @@ jobs:
         ssh-private-key: |
           ${{ secrets.DEPLOY_KEY_EDGE_FN_SWIFT }}
           ${{ secrets.DEPLOY_KEY_SUBSTRATA_SWIFT }}
+    - name: Get tag
       id: vars
       run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
     - name: Build
