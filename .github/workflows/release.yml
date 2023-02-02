@@ -12,8 +12,13 @@ jobs:
     runs-on: macos-latest
     environment: deployment
     steps:
-    - uses: actions/checkout@v3
     - name: Get tag
+    - uses: actions/checkout@v3
+    - uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: |
+          ${{ secrets.DEPLOY_KEY_EDGE_FN_SWIFT }}
+          ${{ secrets.DEPLOY_KEY_SUBSTRATA_SWIFT }}
       id: vars
       run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
     - name: Build
