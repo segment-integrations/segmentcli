@@ -12,22 +12,22 @@ import ColorizeSwift
 import Segment
 
 class EdgeFnGroup: CommandGroup {
-    let name = "edgefn"
-    let shortDescription = "Work with and develop edge functions"
+    let name = "liveplugins"
+    let shortDescription = "Work with and develop analytics live plugins"
     let children: [Routable] = [EdgeFnLatestCommand(), EdgeFnUpload(), EdgeFnDisable()]
     init() {}
 }
 
 class EdgeFnDisable: Command {
     let name = "disable"
-    let shortDescription = "Disable edge functions for a given source ID"
+    let shortDescription = "Disable Live Plugins for a given source ID"
     
     @Param var sourceId: String
 
     func execute() throws {
         guard let workspace = currentWorkspace else { exitWithError(code: .commandFailed, message: "No authentication tokens found."); return }
         executeAndWait { semaphore in
-            let spinner = Spinner(.dots, "Uploading edge function ...")
+            let spinner = Spinner(.dots, "Uploading live plugin ...")
             spinner.start()
             
             PAPI.shared.edgeFunctions.disable(token: workspace.token, sourceId: sourceId) { data, response, error in
@@ -42,14 +42,14 @@ class EdgeFnDisable: Command {
                 switch statusCode {
                 case .ok:
                     // success!
-                    print("Edge functions disabled for \(self.sourceId.italic.bold).")
+                    print("Live plugins disabled for \(self.sourceId.italic.bold).")
                     
                 case .unauthorized:
                     fallthrough
                 case .unauthorized2:
                     exitWithError(code: .commandFailed, message: "Supplied token is not authorized.")
                 case .notFound:
-                    exitWithError(code: .commandFailed, message: "No edge functions were found.")
+                    exitWithError(code: .commandFailed, message: "No live plugins were found.")
                 default:
                     exitWithError("An unknown error occurred.")
                 }
@@ -62,7 +62,7 @@ class EdgeFnDisable: Command {
 
 class EdgeFnUpload: Command {
     let name = "upload"
-    let shortDescription = "Upload an edge function"
+    let shortDescription = "Upload a Live Plugin"
     
     @Param var sourceId: String
     @Param var filePath: String
@@ -102,7 +102,7 @@ class EdgeFnUpload: Command {
                 case .unauthorized2:
                     exitWithError(code: .commandFailed, message: "Supplied token is not authorized.")
                 case .notFound:
-                    exitWithError(code: .commandFailed, message: "No edge functions were found.")
+                    exitWithError(code: .commandFailed, message: "No live plugins were found.")
                 default:
                     exitWithError("An unknown error occurred.")
                 }
@@ -134,7 +134,7 @@ class EdgeFnUpload: Command {
                 case .unauthorized2:
                     exitWithError(code: .commandFailed, message: "Supplied token is not authorized.")
                 case .notFound:
-                    exitWithError(code: .commandFailed, message: "No edge functions were found.")
+                    exitWithError(code: .commandFailed, message: "No live plugins were found.")
                 default:
                     exitWithError("An unknown error occurred.")
                 }
@@ -144,7 +144,7 @@ class EdgeFnUpload: Command {
 
         // call create to make a new connection to the version we just posted.
         executeAndWait { semaphore in
-            let spinner = Spinner(.dots, "Creating new edge function version ...")
+            let spinner = Spinner(.dots, "Creating new live plugin version ...")
             spinner.start()
             
             PAPI.shared.edgeFunctions.createNewVersion(token: workspace.token, sourceId: sourceId, uploadURL: uploadURL) { data, response, error in
@@ -170,7 +170,7 @@ class EdgeFnUpload: Command {
                 case .unauthorized2:
                     exitWithError(code: .commandFailed, message: "Supplied token is not authorized.")
                 case .notFound:
-                    exitWithError(code: .commandFailed, message: "No edge functions were found.")
+                    exitWithError(code: .commandFailed, message: "No live plugins were found.")
                 default:
                     exitWithError("An unknown error occurred.")
                 }
@@ -183,7 +183,7 @@ class EdgeFnUpload: Command {
 
 class EdgeFnLatestCommand: Command {
     let name = "latest"
-    let shortDescription = "Get info about the latest Edge Function in use"
+    let shortDescription = "Get info about the latest Live Plugin in use"
     
     @Param var sourceId: String
     
@@ -191,7 +191,7 @@ class EdgeFnLatestCommand: Command {
         guard let workspace = currentWorkspace else { exitWithError(code: .commandFailed, message: "No authentication tokens found."); return }
 
         executeAndWait { semaphore in
-            let spinner = Spinner(.dots, "Retrieving latest Edge Functino info ...")
+            let spinner = Spinner(.dots, "Retrieving latest Live Plugin info ...")
             spinner.start()
             
             PAPI.shared.edgeFunctions.latest(token: workspace.token, sourceId: sourceId) { data, response, error in
@@ -217,7 +217,7 @@ class EdgeFnLatestCommand: Command {
                 case .unauthorized2:
                     exitWithError(code: .commandFailed, message: "Supplied token is not authorized.")
                 case .notFound:
-                    exitWithError(code: .commandFailed, message: "No edge functions were found.")
+                    exitWithError(code: .commandFailed, message: "No live plugins were found.")
                 default:
                     exitWithError("An unknown error occurred.")
                 }
