@@ -9,7 +9,7 @@ import Foundation
 import Segment
 import Substrata
 import SwiftCLI
-import EdgeFn
+import AnalyticsLive
 
 var engine = JSEngine()
 
