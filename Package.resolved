@@ -5,9 +5,18 @@
         "package": "Segment",
         "repositoryURL": "https://github.com/segmentio/analytics-swift.git",
         "state": {
-          "branch": "bsneed/cli_additions",
-          "revision": "f778e2e9c19f4e3052317c5af26a4897ef77cc86",
-          "version": null
+          "branch": null,
+          "revision": "c8fd5fdf59299f00b3e4303a1b12a6d88893bf56",
+          "version": "1.4.7"
+        }
+      },
+      {
+        "package": "AnalyticsLive",
+        "repositoryURL": "git@github.com:segment-integrations/analytics-swift-live.git",
+        "state": {
+          "branch": null,
+          "revision": "3b07681d498595aa8e06cd814003db53661abb88",
+          "version": "0.2.3"
         }
       },
       {
@@ -26,15 +35,6 @@
           "branch": null,
           "revision": "2a354639173d021f4648cf1912b2b00a3a7cd83c",
           "version": "1.6.0"
-        }
-      },
-      {
-        "package": "EdgeFn",
-        "repositoryURL": "git@github.com:segmentio/EdgeFn-Swift.git",
-        "state": {
-          "branch": "main",
-          "revision": "9e7fe14e458148a8e86ac56e85d52bc13d595288",
-          "version": null
         }
       },
       {
@@ -78,8 +78,8 @@
         "repositoryURL": "https://github.com/segmentio/Sovran-Swift.git",
         "state": {
           "branch": null,
-          "revision": "944c17d7c46bd95fc37f09136cabd172be5b413b",
-          "version": "1.0.3"
+          "revision": "64f3b5150c282a34af4578188dce2fd597e600e3",
+          "version": "1.1.0"
         }
       },
       {
@@ -95,9 +95,9 @@
         "package": "Substrata",
         "repositoryURL": "git@github.com:segmentio/substrata-swift.git",
         "state": {
-          "branch": "main",
-          "revision": "079da728865b9933d41466c588bbc3079ee1ee66",
-          "version": null
+          "branch": null,
+          "revision": "a673d773d0a6dab86a31cadcb771b45022e0c5ac",
+          "version": "0.0.2"
         }
       },
       {
