@@ -6,8 +6,15 @@
 //
 
 import Foundation
+import SwiftCLI
 
-let PAPIEndpoint: String = "https://api.segmentapis.com/"
+var PAPIEndpoint: String {
+    if useStagingKey.value {
+        return "https://api.segmentapis.build/"
+    } else {
+        return "https://api.segmentapis.com/"
+    }
+}
 
 protocol PAPISection {
     static var pathEntry: String { get }
@@ -52,4 +59,12 @@ class PAPI {
         task.resume()
     }
     
+}
+
+// MARK: - Global option to support staging
+let useStagingKey = Flag("--staging", description: "Use Segment staging for operations")
+extension Command {
+    var isStaging: Bool {
+        return useStagingKey.value
+    }
 }

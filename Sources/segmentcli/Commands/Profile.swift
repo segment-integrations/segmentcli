@@ -77,7 +77,6 @@ class ProfileSetCommand: Command {
 }
 
 // MARK: - Global option for profile
-
 let specifiedProfileKey = Key<String>("-p", "--profile", description: "Specify a profile name to use for this operation")
 extension Command {
     var specifiedProfile: String? {

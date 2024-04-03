@@ -18,6 +18,7 @@ func main() {
                         SourcesGroup()
                       ])
     
+    segment.globalOptions.append(useStagingKey)
     segment.globalOptions.append(specifiedProfileKey)
     
     segment.go()
