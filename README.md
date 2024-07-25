@@ -29,6 +29,18 @@ In order to use the segmentcli to work with your workspace you must have the
 Analytics Live Plugins featured enabled in your workspace and you must 
 authenticate with that workspace.
 
+### Installation
+
+Run this command to install segmentcli locally from the repo:
+```bash
+$ sudo make install
+```
+
+or, using brew:
+```bash
+$ brew install segment-integrations/formulae/segmentcli
+```
+
 ### Enabling the Analytics Live Plugins feature
 
 Reach out to your Customer Support Engineer (CSE) or Customer Success Manager (CSM) 
@@ -57,7 +69,7 @@ an Auth token in your Segment workspace.
 In order to upload your Analytics Live Plugins you'll need the following command:
 
 ```bash
-$ segmentcli upload <SourceId> <FileName>
+$ segmentcli liveplugins upload <SourceId> <FileName>
 ```
 
 `SourceId` - This is listed next your Write Key in the Segment app.
