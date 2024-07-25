@@ -31,7 +31,12 @@ authenticate with that workspace.
 
 ### Installation
 
-Run this command to install segmentcli:
+Run this command to install segmentcli locally from the repo:
+```bash
+$ sudo make install
+```
+
+or, using brew:
 ```bash
 $ brew install segment-integrations/formulae/segmentcli
 ```
