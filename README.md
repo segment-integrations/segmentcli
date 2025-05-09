@@ -35,10 +35,6 @@ sudo make install
 
 A binary `segmentcli` will be installed to `/usr/local/bin`.
 
-In order to use the segmentcli to work with your workspace you must have the 
-Analytics Live Plugins feature enabled in your workspace and you must 
-authenticate with that workspace.
-
 ## Authenticating
 
 The command to authenticate is as follows:
