@@ -71,7 +71,7 @@ to have them add this feature to your account.  Once that is completed, you may 
 In order to upload your Analytics Live Plugins you'll need the following command:
 
 ```bash
-$ segmentcli upload <SourceId> <FileName>
+$ segmentcli liveplugins upload <SourceId> <FileName>
 ```
 
 `SourceId` - This is listed next your Write Key in the Segment app.
