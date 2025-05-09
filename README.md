@@ -25,14 +25,21 @@ Commands:
 
 ## Getting Started
 
+### Installing `segmentcli`.
+
+```
+git clone https://github.com/segment-integrations/segmentcli.git
+cd segmentcli
+sudo make install
+```
+
+A binary `segmentcli` will be installed to `/usr/local/bin`.
+
 In order to use the segmentcli to work with your workspace you must have the 
-Analytics Live Plugins featured enabled in your workspace and you must 
+Analytics Live Plugins feature enabled in your workspace and you must 
 authenticate with that workspace.
 
-### Enabling the Analytics Live Plugins feature
-
-Reach out to your Customer Support Engineer (CSE) or Customer Success Manager (CSM) 
-to have them add this feature to your account.
+## Authenticating
 
 The command to authenticate is as follows:
 
@@ -52,7 +59,14 @@ an Auth token in your Segment workspace.
 1. Navigate to Settings > Workspace Settings > Access Management > Tokens
 1. Generate a new token using the "Create token" button with the Workspace Owner role.
 
-## Uploading Your Analytics Live Plugins to Your Workspace
+## Using `segmentcli` with Analytics Live.
+
+### Enabling the Analytics Live Plugins feature
+
+Reach out to your Customer Support Engineer (CSE) or Customer Success Manager (CSM) 
+to have them add this feature to your account.  Once that is completed, you may continue.
+
+### Uploading Your Analytics Live Plugins to Your Workspace
 
 In order to upload your Analytics Live Plugins you'll need the following command:
 
@@ -66,7 +80,7 @@ $ segmentcli upload <SourceId> <FileName>
 Note: It will take a few minutes for your Source's setting payload to be update
 with the Analytics Live Plugin file URL.
 
-### Finding Your SourceID
+## Finding Your SourceID
 
 1. Log into https://app.segment.com
 1. Navigate to Connections > Sources

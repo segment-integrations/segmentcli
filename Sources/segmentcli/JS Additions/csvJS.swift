@@ -43,37 +43,31 @@ import Substrata
 }
 */
 
-class CSVJS: JavascriptClass, JSConvertible {
-    internal let csv: CSV?
-    
-    static var className = "CSV"
-    
-    static var staticProperties = [String: JavascriptProperty]()
-    static var staticMethods = [String: JavascriptMethod]()
-    var instanceProperties: [String: JavascriptProperty] = [
-        "rows": JavascriptProperty(get: { weakSelf, this in
-            guard let self = weakSelf as? CSVJS else { return nil }
-            return self.csv?.namedRows.count
-        })
-    ]
-    
-    var instanceMethods: [String : JavascriptMethod] = [
-        "value": JavascriptMethod { weakSelf, this, params in
-            guard let self = weakSelf as? CSVJS else { return nil }
-            guard let row = params[0]?.typed(Int.self) else { return nil }
-            guard let columnName = params[1]?.typed(String.self) else { return nil }
-            let result = self.csv?.namedRows[row][columnName]
-            return result
+class CSVJS: JSExport {
+    internal var csv: CSV? = nil
+
+    required init() {
+        super.init()
+        
+        exportProperty(named: "rows") {
+            guard let csv = self.csv else { throw "No CSV file loaded." }
+            return csv.namedRows.count
         }
-    ]
+        
+        exportMethod(named: "value") { args in
+            guard let csv = self.csv else { throw "No CSV file loaded." }
+            guard let row = args.typed(as: Int.self, index: 0) else { return nil }
+            guard let columnName = args.typed(as: String.self, index: 1) else { return nil }
+            return csv.namedRows[row][columnName]
+        }
+    }
     
-    public required init(context: JSContext, params: JSConvertible?...) throws {
-        guard let csvPath = params[0]?.typed(String.self) else { throw "Unable to load specified CSV file." }
-        let delimiter = params[1]?.typed(String.self) ?? "|"
-        let loadColumns = params[2]?.typed(Bool.self) ?? true
+    override func construct(args: [JSConvertible?]) throws {
+        guard let csvPath = args.typed(as: String.self, index: 0) else { throw "Unable to load specified CSV file." }
+        let delimiter = args.typed(as: String.self, index: 1) ?? "|"
+        let loadColumns = args.typed(as: Bool.self, index: 2) ?? true
 
         let url = URL(fileURLWithPath: csvPath)
         self.csv = try CSV(url: url, delimiter: delimiter.first ?? "|", encoding: .utf8, loadColumns: loadColumns)
     }
-
 }

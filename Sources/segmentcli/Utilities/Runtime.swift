@@ -41,7 +41,7 @@ func runJSInteractive() {
                     
                 case _ where input.hasPrefix(":print"):
                     let variable = input.replacingOccurrences(of: ":print ", with: "")
-                    if let value = engine.object(key: variable) {
+                    if let value = engine.value(for: variable) {
                         print("\(variable) = \(String(describing: value))")
                     } else {
                         print("\(variable) = nil")
@@ -75,16 +75,7 @@ func runJSFile(path scriptFile: String) {
         do {
             let url = URL(fileURLWithPath: scriptFile)
             let code = try String(contentsOf: url)
-            let readQueue = DispatchQueue(label: "segmentcli.js.execution")
-            @Atomic var done = false
-            readQueue.async {
-                engine.evaluate(script: code)
-                done = true
-            }
-            // don't have a good solution to knowing when async stuff is complete yet.
-            while done == false {
-                RunLoop.main.run(until: Date(timeIntervalSinceNow: 10))
-            }
+            engine.evaluate(script: code)
         } catch {
             exitWithError(error.localizedDescription)
         }
@@ -95,31 +86,17 @@ func runJSFile(path scriptFile: String) {
 
 func runJS(script: String) {
     configureEngine()
-    let readQueue = DispatchQueue(label: "segmentcli.js.execution")
-    @Atomic var done = false
-    readQueue.async {
-        engine.evaluate(script: script)
-        done = true
-    }
-    // TODO: don't have a good solution to knowing when async stuff is complete yet.
-    while done == false {
-        RunLoop.main.run(until: Date(timeIntervalSinceNow: 10))
-    }
+    engine.evaluate(script: script)
 }
 
 
 func configureEngine() {
-    engine.errorHandler = { error in
-        switch error {
-        case .evaluationError(let s):
-            print(s)
-        default:
-            print(error)
-        }
+    engine.exceptionHandler = { error in
+        print(error)
     }
     
     // expose our classes
-    try? engine.expose(name: "Analytics", classType: AnalyticsJS.self)
+    engine.export(type: AnalyticsJS.self, className: "Analytics")
     
     // set the system analytics object.
     //engine.setObject(key: "analytics", value: AnalyticsJS(wrapping: self.analytics, engine: engine))

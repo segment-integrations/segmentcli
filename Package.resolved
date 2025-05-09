@@ -6,17 +6,17 @@
         "repositoryURL": "https://github.com/segmentio/analytics-swift.git",
         "state": {
           "branch": null,
-          "revision": "c8fd5fdf59299f00b3e4303a1b12a6d88893bf56",
-          "version": "1.4.7"
+          "revision": "7d47f4b42e6d74fe2de73b8e3c3fc2eeae4a3efd",
+          "version": "1.7.3"
         }
       },
       {
         "package": "AnalyticsLive",
-        "repositoryURL": "git@github.com:segment-integrations/analytics-swift-live.git",
+        "repositoryURL": "https://github.com/segment-integrations/analytics-swift-live.git",
         "state": {
           "branch": null,
-          "revision": "3b07681d498595aa8e06cd814003db53661abb88",
-          "version": "0.2.3"
+          "revision": "fa1f3f75ee439544ce3bf69cf99f01a5cdb36bb7",
+          "version": "3.1.7"
         }
       },
       {
@@ -35,6 +35,15 @@
           "branch": null,
           "revision": "2a354639173d021f4648cf1912b2b00a3a7cd83c",
           "version": "1.6.0"
+        }
+      },
+      {
+        "package": "JSONSafeEncoding",
+        "repositoryURL": "https://github.com/segmentio/jsonsafeencoding-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "af6a8b360984085e36c6341b21ecb35c12f47ebd",
+          "version": "2.0.0"
         }
       },
       {
@@ -78,8 +87,8 @@
         "repositoryURL": "https://github.com/segmentio/Sovran-Swift.git",
         "state": {
           "branch": null,
-          "revision": "64f3b5150c282a34af4578188dce2fd597e600e3",
-          "version": "1.1.0"
+          "revision": "24867f3e4ac62027db9827112135e6531b6f4051",
+          "version": "1.1.2"
         }
       },
       {
@@ -93,11 +102,11 @@
       },
       {
         "package": "Substrata",
-        "repositoryURL": "git@github.com:segmentio/substrata-swift.git",
+        "repositoryURL": "https://github.com/segmentio/substrata-swift.git",
         "state": {
           "branch": null,
-          "revision": "a673d773d0a6dab86a31cadcb771b45022e0c5ac",
-          "version": "0.0.2"
+          "revision": "293df9d9ad5339bf24abaf9525518c5019a061b7",
+          "version": "2.1.0"
         }
       },
       {

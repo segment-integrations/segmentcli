@@ -20,6 +20,8 @@ func executeAndWait(_ closure: (DispatchSemaphore) -> Void) {
 
 // MARK: - Exits & Errors
 
+extension String: @retroactive Error { }
+
 enum ErrorCode: Int {
     case success = 0
     case unknown = 1
