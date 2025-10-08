@@ -62,7 +62,7 @@ an Auth token in your Segment workspace.
 Reach out to your Customer Support Engineer (CSE) or Customer Success Manager (CSM) 
 to have them add this feature to your account.  Once that is completed, you may continue.
 
-### Uploading Your Analytics Live Plugins to Your Workspace
+### Uploading Your Analytics Live Plugins to Your Source
 
 In order to upload your Analytics Live Plugins you'll need the following command:
 
