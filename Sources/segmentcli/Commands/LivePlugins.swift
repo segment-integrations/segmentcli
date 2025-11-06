@@ -36,14 +36,14 @@ class EdgeFnDeleteCode: Command {
                 if let error = error {
                     exitWithError(error)
                 }
-                
+
                 let statusCode = PAPI.shared.statusCode(response: response)
-                
+
                 switch statusCode {
                 case .ok:
                     // success!
                     print("Live plugin code deleted for \(self.sourceId.italic.bold).")
-                    
+
                 case .unauthorized:
                     fallthrough
                 case .unauthorized2:
@@ -69,8 +69,6 @@ class EdgeFnUpload: Command {
     
     func execute() throws {
         guard let workspace = currentWorkspace else { exitWithError(code: .commandFailed, message: "No authentication tokens found."); return }
-        
-        var uploadURL: URL? = nil
         
         let fileURL = URL(fileURLWithPath: filePath.expandingTildeInPath)
         
