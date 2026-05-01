@@ -12,9 +12,6 @@ var PAPIEndpoint: String {
     if useStagingKey.value {
         return "https://api.segmentapis.build/"
     } else {
-        // Segment Public API is single-region. EU workspaces use the same host;
-        // the token is workspace-scoped server-side. (eu1.segmentapis.com is for
-        // event ingestion only, not the Public API.)
         return "https://api.segmentapis.com/"
     }
 }
@@ -23,10 +20,8 @@ protocol PAPISection {
     static var pathEntry: String { get }
 }
 
-// URLSession by default strips Authorization headers on redirect. Segment's
-// Public API can issue redirects (e.g. canonicalising trailing slashes) which
-// causes a 401 "Authorization header is required" on the followed request.
-// This delegate re-attaches the original Authorization header on redirect.
+// URLSession strips Authorization on redirect by default; api.segmentapis.com
+// 30x's to regional hosts (e.g. eu1.api.segmentapis.com) for EU workspaces.
 final class PAPIRedirectDelegate: NSObject, URLSessionTaskDelegate {
     static let shared = PAPIRedirectDelegate()
     func urlSession(_ session: URLSession,
@@ -35,13 +30,11 @@ final class PAPIRedirectDelegate: NSObject, URLSessionTaskDelegate {
                     newRequest request: URLRequest,
                     completionHandler: @escaping (URLRequest?) -> Void) {
         var newRequest = request
-        if let auth = task.originalRequest?.value(forHTTPHeaderField: "Authorization"),
-           newRequest.value(forHTTPHeaderField: "Authorization") == nil {
-            newRequest.setValue(auth, forHTTPHeaderField: "Authorization")
-        }
-        if let accept = task.originalRequest?.value(forHTTPHeaderField: "Accept"),
-           newRequest.value(forHTTPHeaderField: "Accept") == nil {
-            newRequest.setValue(accept, forHTTPHeaderField: "Accept")
+        for header in ["Authorization", "Accept"] {
+            if let value = task.originalRequest?.value(forHTTPHeaderField: header),
+               newRequest.value(forHTTPHeaderField: header) == nil {
+                newRequest.setValue(value, forHTTPHeaderField: header)
+            }
         }
         completionHandler(newRequest)
     }
@@ -64,18 +57,17 @@ class PAPI {
 
     static let shared = PAPI()
 
-    let session: URLSession = URLSession(configuration: .default,
-                                         delegate: PAPIRedirectDelegate.shared,
-                                         delegateQueue: nil)
+    let session = URLSession(configuration: .default,
+                             delegate: PAPIRedirectDelegate.shared,
+                             delegateQueue: nil)
 
     let sources = PAPI.Sources()
     let edgeFunctions = PAPI.EdgeFunctions()
 
     func statusCode(response: URLResponse?) -> StatusCode {
-        if let httpResponse = response as? HTTPURLResponse {
-            if let status = StatusCode(rawValue: httpResponse.statusCode) {
-                return status
-            }
+        if let httpResponse = response as? HTTPURLResponse,
+           let status = StatusCode(rawValue: httpResponse.statusCode) {
+            return status
         }
         return .unknown
     }
@@ -87,17 +79,7 @@ class PAPI {
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.addValue("application/vnd.segment.v1+json", forHTTPHeaderField: "Accept")
 
-        let task = session.dataTask(with: request) { data, response, error in
-            if ProcessInfo.processInfo.environment["SEGMENTCLI_DEBUG"] != nil {
-                if let httpResponse = response as? HTTPURLResponse {
-                    FileHandle.standardError.write("[debug] \(httpResponse.url?.absoluteString ?? request.url?.absoluteString ?? "") -> \(httpResponse.statusCode)\n".data(using: .utf8) ?? Data())
-                }
-                if let data = data, let body = String(data: data, encoding: .utf8) {
-                    FileHandle.standardError.write("[debug] body: \(body)\n".data(using: .utf8) ?? Data())
-                }
-            }
-            completion(data, response, error)
-        }
+        let task = session.dataTask(with: request, completionHandler: completion)
         task.resume()
     }
 
