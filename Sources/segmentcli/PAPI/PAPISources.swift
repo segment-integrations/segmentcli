@@ -20,7 +20,7 @@ extension PAPI {
             var request = URLRequest(url: newURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30)
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             
-            let task = URLSession.shared.dataTask(with: request, completionHandler: completion)
+            let task = PAPI.shared.session.dataTask(with: request, completionHandler: completion)
             task.resume()
         }
     }

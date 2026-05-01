@@ -23,7 +23,7 @@ extension PAPI {
             request.httpMethod = "GET"
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             
-            let task = URLSession.shared.dataTask(with: request, completionHandler: completion)
+            let task = PAPI.shared.session.dataTask(with: request, completionHandler: completion)
             task.resume()
         }
         
@@ -41,7 +41,7 @@ extension PAPI {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = "{ \"sourceId\": \"\(sourceId)\" }".data(using: .utf8)
 
-            let task = URLSession.shared.dataTask(with: request, completionHandler: completion)
+            let task = PAPI.shared.session.dataTask(with: request, completionHandler: completion)
             task.resume()
         }
         
@@ -59,7 +59,7 @@ extension PAPI {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = "{ \"sourceId\": \"\(sourceId)\" }".data(using: .utf8)
             
-            let task = URLSession.shared.dataTask(with: request, completionHandler: completion)
+            let task = PAPI.shared.session.dataTask(with: request, completionHandler: completion)
             task.resume()
         }
         
@@ -79,7 +79,7 @@ extension PAPI {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = "{ \"uploadURL\": \"\(uploadURL.absoluteString)\", \"sourceId\": \"\(sourceId)\" }".data(using: .utf8)
 
-            let task = URLSession.shared.dataTask(with: request, completionHandler: completion)
+            let task = PAPI.shared.session.dataTask(with: request, completionHandler: completion)
             task.resume()
         }
         
@@ -88,7 +88,7 @@ extension PAPI {
             guard let fileURL = fileURL else { completion(nil, nil, "File URL is nil."); return }
             var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30)
             request.httpMethod = "PUT"
-            let task = URLSession.shared.uploadTask(with: request, fromFile: fileURL, completionHandler: completion)
+            let task = PAPI.shared.session.uploadTask(with: request, fromFile: fileURL, completionHandler: completion)
             task.resume()
         }
     }
