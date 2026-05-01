@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Brandon Sneed on 12/3/21.
 //
@@ -20,6 +20,26 @@ protocol PAPISection {
     static var pathEntry: String { get }
 }
 
+// URLSession strips Authorization on redirect by default; api.segmentapis.com
+// 30x's to regional hosts (e.g. eu1.api.segmentapis.com) for EU workspaces.
+final class PAPIRedirectDelegate: NSObject, URLSessionTaskDelegate {
+    static let shared = PAPIRedirectDelegate()
+    func urlSession(_ session: URLSession,
+                    task: URLSessionTask,
+                    willPerformHTTPRedirection response: HTTPURLResponse,
+                    newRequest request: URLRequest,
+                    completionHandler: @escaping (URLRequest?) -> Void) {
+        var newRequest = request
+        for header in ["Authorization", "Accept"] {
+            if let value = task.originalRequest?.value(forHTTPHeaderField: header),
+               newRequest.value(forHTTPHeaderField: header) == nil {
+                newRequest.setValue(value, forHTTPHeaderField: header)
+            }
+        }
+        completionHandler(newRequest)
+    }
+}
+
 class PAPI {
     enum StatusCode: Int {
         case unknown = 0
@@ -34,31 +54,35 @@ class PAPI {
         case tooManyRequests = 429
         case serverError = 500
     }
-    
+
     static let shared = PAPI()
-    
+
+    let session = URLSession(configuration: .default,
+                             delegate: PAPIRedirectDelegate.shared,
+                             delegateQueue: nil)
+
     let sources = PAPI.Sources()
     let edgeFunctions = PAPI.EdgeFunctions()
-    
+
     func statusCode(response: URLResponse?) -> StatusCode {
-        if let httpResponse = response as? HTTPURLResponse {
-            if let status = StatusCode(rawValue: httpResponse.statusCode) {
-                return status
-            }
+        if let httpResponse = response as? HTTPURLResponse,
+           let status = StatusCode(rawValue: httpResponse.statusCode) {
+            return status
         }
         return .unknown
     }
-    
+
     func authenticate(token: String, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
         guard let url = URL(string: PAPIEndpoint) else { completion(nil, nil, "Unable to create URL."); return }
-        
+
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30)
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
-        let task = URLSession.shared.dataTask(with: request, completionHandler: completion)
+        request.addValue("application/vnd.segment.v1+json", forHTTPHeaderField: "Accept")
+
+        let task = session.dataTask(with: request, completionHandler: completion)
         task.resume()
     }
-    
+
 }
 
 // MARK: - Global option to support staging
